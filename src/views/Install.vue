@@ -2,48 +2,48 @@
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
       <header>
-        <h1>Welcome to Hotwax Commerce Order Management for Shopify</h1>
+        <h1>{{ $t("Welcome to Hotwax Commerce Order Management for Shopify") }}</h1>
       </header>
 
       <div class="content">
         <ion-card id="instructions">
           <ion-card-content>
-            <h1>Getting started checklist</h1>
-            <h2>Complete the following steps to connect this Shopify store to your Deck Commerce installation.</h2>
+            <h1>{{ $t("Getting started checklist") }}</h1>
+            <h2>{{ $t("Complete the following steps to connect this Shopify store to your Deck Commerce installation.") }}</h2>
             <ol>
-              <li>Connect this shopify store to your Hotwax Commerce Instance.</li>
-              <li>Set up and enable your order sync from Shopify to Hotwax Commerce.</li>
-              <li>Set up and enable Shopify to pull in a Hotwax Commerce inventory feed.</li>
-              <li>Set up and enable order updates to Shopify (order fulfillment, cancellation, and changes).</li>
+              <li>{{ $t("Connect this Shopify store to your Hotwax Commerce instance.") }}</li>
+              <li>{{ $t("Set up and enable your order sync from Shopify to Hotwax Commerce.") }}</li>
+              <li>{{ $t("Set up and enable Shopify to pull in a Hotwax Commerce inventory feed.")}}</li>
+              <li>{{ $t("Set up and enable order updates to Shopify (order fulfillment, cancellation, and changes).") }}</li>
             </ol>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
-            <h1>Connect Hotwax Commerce</h1>
-            <h2>Connect this Shopify store to your Hotwax Commerce instance.</h2>
-            <ion-button expand="block">Set up connection</ion-button>
+            <h1>{{ $t("Connect Hotwax Commerce") }}</h1>
+            <h2>{{ $t("Connect this Shopify store to your Hotwax Commerce instance.") }}</h2>
+            <ion-button expand="block">{{ $t("Set up connection") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
-            <h1>Set up inventory feed</h1>
-            <h2>The inventory feed sync to Shopify is currently inactive.</h2>
-            <ion-button expand="block" fill="outline">Settings</ion-button>
+            <h1>{{ $t("Set up inventory feed") }}</h1>
+            <h2>{{ $t("The inventory feed sync to Shopify is currently inactive.") }}</h2>
+            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
-            <h1>Order Updates from Hotwax Commerce</h1>
-            <h2>The order update sync to Shopify is currently inactive.</h2>
-            <ion-button expand="block" fill="outline">Settings</ion-button>
+            <h1>{{ $t("Order Updates from Hotwax Commerce") }}</h1>
+            <h2>{{ $t("The order update sync to Shopify is currently inactive.") }}</h2>
+            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
-            <h1>Order Sync to Hotwax Commerce</h1>
-            <h2>The order sync to Shopify is currently inactive.</h2>
-            <ion-button expand="block" fill="outline">Settings</ion-button>
+            <h1>{{ $t("Order Sync to Hotwax Commerce") }}</h1>
+            <h2>{{ $t("The order sync to Shopify is currently inactive.") }}</h2>
+            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
       </div>
