@@ -1,7 +1,18 @@
 {
-  "Blank": "Blank",
-  "Click the backdrop to dismiss.": "Click the backdrop to dismiss.",
-  "Ready to create an app?": "Ready to create an app?",
-  "Start with Ionic": "Start with Ionic",
-  "UI Components": "UI Components"
+  "Complete the following steps to connect this Shopify store to your Deck Commerce installation.": "Complete the following steps to connect this Shopify store to your Deck Commerce installation.",
+  "Connect Hotwax Commerce":"Connect Hotwax Commerce",
+  "Connect this Shopify store to your Hotwax Commerce Instance.":"Connect this shopify store to your Hotwax Commerce Instance.",
+  "Getting started checklist": "Getting started checklist",
+  "Order Sync to Hotwax Commerce": "Order Sync to Hotwax Commerce",
+  "Order Updates from Hotwax Commerce":"Order Updates from Hotwax Commerce",
+  "Settings": "Settings",
+  "Set up and enable order updates to Shopify (order fulfillment, cancellation, and changes).":"Set up and enable order updates to Shopify (order fulfillment, cancellation, and changes).",
+  "Set up and enable Shopify to pull in a Hotwax Commerce inventoryfeed.":"Set up and enable Shopify to pull in a Hotwax Commerce inventoryfeed.",
+  "Set up and enable your order sync from Shopify to Hotwax Commerce.":"Set up and enable your order sync from Shopify to Hotwax Commerce.",
+  "Set up connection":"Set up connection",
+  "Set up inventory feed":"Set up inventory feed",
+  "The inventory feed sync to Shopify is currently inactive.": "The inventory feed sync to Shopify is currently inactive.",
+  "The order sync to Shopify is currently inactive.": "The order sync to Shopify is currently inactive.",
+  "The order update sync to Shopify is currently inactive.":"The order update sync to Shopify is currently inactive.",
+  "Welcome to Hotwax Commerce Order Management for Shopify": "Welcome to Hotwax Commerce Order Management for Shopify"
 }
