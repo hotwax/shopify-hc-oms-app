@@ -33,7 +33,7 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Private Key") }}</ion-label>
-              <ion-input clear-input placeholder="Input text">
+              <ion-input clear-input placeholder="$t(Input text)">
               </ion-input>
             </ion-item>
           </ion-card-content>

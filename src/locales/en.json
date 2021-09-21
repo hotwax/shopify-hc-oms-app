@@ -12,6 +12,7 @@
   "HotWax Commerce URL":"HotWax Commerce URL",
   "HotWax Commerce provides an inventory feed by dropping an XML file on an SFTP server. Set up your Shopify's store connection to the SFTP server to receive the inventory feed.":"HotWax Commerce provides an inventory feed by dropping an XML file on an SFTP server. Set up your Shopify's store connection to the SFTP server to receive the inventory feed.",
   "Host":"Host",
+  "Input text":"Input text",
   "Inventory feed from HotWax Commerce":"Inventory feed from HotWax Commerce",
   "Map any configured shipping methods to those set up in your Deck Commerce instance.":"Map any configured shipping methods to those set up in your Deck Commerce instance.",
   "Order Sync":"Order Sync",

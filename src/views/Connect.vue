@@ -13,7 +13,7 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input clear-input placeholder="Input text" >
+              <ion-input clear-input placeholder="$t(Input text)" >
               </ion-input>
             </ion-item>
             <ion-item>
