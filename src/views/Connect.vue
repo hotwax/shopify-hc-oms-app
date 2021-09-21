@@ -6,8 +6,8 @@
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
-      <h2>{{ $t("Connect HotWax Commerce") }}</h2>
-      <div>
+      <h2 class="header">{{ $t("Connect HotWax Commerce") }}</h2>
+      <div class="content">
         <ion-card>
           <ion-card-content>
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
@@ -77,3 +77,14 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped>
+  .content {
+    max-width: 407px;
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .header{
+    text-align: center;
+  }
+</style>

@@ -1,13 +1,13 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
         <ion-fab-button color="medium" href="/Install">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
-      <h2>{{ $t("Inventory feed from HotWax Commerce") }}</h2>
-      <div>
+      <h2 class="header">{{ $t("Inventory feed from HotWax Commerce") }}</h2>
+      <div class="content">
         <ion-button expand="block">
           <ion-icon slot="start" :icon="saveOutline"/>
           <ion-label> {{ $t("SAVE") }}</ion-label>
@@ -114,3 +114,14 @@ export default defineComponent({
   }
 });
 </script>
+<style scoped>
+  .content {
+    max-width: 407px;
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+  .header{
+    text-align: center;
+  }
+</style>
