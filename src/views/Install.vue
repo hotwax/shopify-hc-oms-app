@@ -34,28 +34,28 @@
             <h2>
               {{ $t("Connect this Shopify store to your Hotwax Commerce Instance.") }}
             </h2>
-            <ion-button expand="block">{{ $t("Set up connection") }}</ion-button>
+            <ion-button href="/Connect" expand="block">{{ $t("Set up connection") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Set up inventory feed") }}</h1>
             <h2>{{ $t("The inventory feed sync to Shopify is currently inactive.") }}</h2>
-            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button href="/Inventory" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Order Updates from Hotwax Commerce") }}</h1>
             <h2>{{ $t("The order update sync to Shopify is currently inactive.") }}</h2>
-            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button  href="/Update" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Order Sync to Hotwax Commerce") }}</h1>
             <h2>{{ $t("The order sync to Shopify is currently inactive.") }}</h2>
-            <ion-button expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button  href="/Sync" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
       </div>
