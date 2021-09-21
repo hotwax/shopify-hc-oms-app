@@ -6,10 +6,10 @@
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
-      <h2>Inventory feed from HotWax Commerce</h2>
+      <h2>{{ $t("Inventory feed from HotWax Commerce") }}</h2>
       <div>
         <ion-button expand="block">
-          <ion-icon :icon="saveOutline"/>
+          <ion-icon slot="start" :icon="saveOutline"/>
           <ion-label> {{ $t("SAVE") }}</ion-label>
         </ion-button>
         <ion-card>
@@ -33,7 +33,8 @@
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Private Key") }}</ion-label>
-              <ion-input placeholder="Input text" clear-input></ion-input>
+              <ion-input clear-input placeholder="Input text">
+              </ion-input>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -54,8 +55,9 @@
           <ion-card-content>
             <h2>{{ $t("Set up how frequently you want Shopify to look for the inventory feed file. You should schedule this similarity to your settings for HotWax Commerce dropping the file.") }}</h2>
             <ion-item>
-              <ion-label>Polling Frequency</ion-label>
+              <ion-label>{{ $t("Polling Frequency") }}</ion-label>
               <ion-select value="15 min">
+                <!-- TODO: We can add more select options here -->
                 <ion-select-option value="15 min">15 min</ion-select-option>
                 <ion-select-option value="30 min">30 min</ion-select-option>
               </ion-select>
@@ -73,11 +75,19 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonPage,
+  IonSelect,
+  IonSelectOption
   
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import { arrowBackOutline, saveOutline } from 'ionicons/icons'
+import { arrowBackOutline, saveOutline} from 'ionicons/icons'
 
 export default defineComponent({
   name: "Inventory",
@@ -86,12 +96,20 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonContent,
+    IonFab,
+    IonFabButton,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
     IonPage,
+    IonSelect,
+    IonSelectOption
   },
   setup() {
     return {
        arrowBackOutline,
-       saveOutline
+       saveOutline,
     };
   }
 });

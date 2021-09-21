@@ -1,19 +1,20 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
         <ion-fab-button color="medium" href="/Install">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
-      <h2>Connect HotWax Commerce</h2>
+      <h2>{{ $t("Connect HotWax Commerce") }}</h2>
       <div>
         <ion-card>
           <ion-card-content>
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input placeholder="Input text"></ion-input>
+              <ion-input clear-input placeholder="Input text" >
+              </ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Shared API Token") }}</ion-label>
@@ -24,7 +25,7 @@
               <ion-input></ion-input>
             </ion-item>
             <ion-button expand="block">
-              <ion-icon :icon="saveOutline" />
+              <ion-icon slot="start" :icon="saveOutline" />
               <ion-label> {{ $t("SAVE") }}</ion-label>
             </ion-button>
           </ion-card-content>
@@ -40,6 +41,12 @@ import {
   IonCard,
   IonCardContent,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonPage,
   
 } from "@ionic/vue";
@@ -53,6 +60,12 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonContent,
+    IonFab,
+    IonFabButton,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
     IonPage,
   },
   setup() {
