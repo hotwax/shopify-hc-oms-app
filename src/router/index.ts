@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Install from '../views/Install.vue'
+import Configure from '../views/Configure.vue'
 import Connect from '../views/Connect.vue'
 import Inventory from '../views/Inventory.vue'
 import Sync from '../views/Sync.vue'
@@ -9,12 +9,12 @@ import Update from '../views/Update.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/install'
+    redirect: '/configure'
   },
   {
-    path: '/install',
-    name: 'Install',
-    component: Install
+    path: '/configure',
+    name: 'Configure',
+    component: Configure
   },
   {
     path: '/connect',
