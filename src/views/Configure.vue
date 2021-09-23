@@ -74,7 +74,7 @@ import {
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Install",
+  name: "Configure",
   components: {
     IonButton,
     IonCard,

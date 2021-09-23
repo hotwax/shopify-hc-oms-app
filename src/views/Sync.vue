@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
-        <ion-fab-button color="medium" href="/Install">
+        <ion-fab-button color="medium" href="/configure">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
