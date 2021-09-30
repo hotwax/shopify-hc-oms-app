@@ -1,7 +1,9 @@
 <template>
   <ion-page>
     <ion-content>
-      <form @submit="install(shopOrigin)">
+      <!-- Commented form tag as when using it the install page reloads again and
+      then redirect to shopify -->
+      <!-- <form> -->
         <ion-list>
           <img src="../assets/images/hc.png" />
           <ion-item>
@@ -15,11 +17,11 @@
           </ion-item>
         </ion-list>
         <div class="ion-padding">
-          <ion-button type="submit" expand="block" @click="install">
+          <ion-button type="submit" expand="block" @click="install(shopOrigin)">
             Install
           </ion-button>
         </div>
-      </form>
+      <!-- </form> -->
     </ion-content>
   </ion-page>
 </template>
@@ -40,6 +42,7 @@ import createApp from "@shopify/app-bridge";
 import { showToast } from "@/utils";
 import { useRouter } from "vue-router";
 import emitter from "@/event-bus"
+import services from "@/services"
 
 export default defineComponent({
   name: "Install",
@@ -65,17 +68,15 @@ export default defineComponent({
       code: this.$route.query['code']
     };
   },
-  mounted () {
+  async mounted () {
     if (this.session) {
-      emitter.emit("presentLoader");
       this.$router.push("/");
     } else if (this.code) {
+      await services.generateAccessToken({key: this.code}).then(resp => resp.json()).catch(err => console.warn(err));
       const appURL = `https://${this.shop}/admin/apps/${this.apiKey}`;
       window.location.assign(appURL);
     } else if (this.shop || this.host) {
       this.authorise(this.shop, this.host, this.apiKey);
-    } else {
-      emitter.emit("dismissLoader");
     }
   },
   methods: {
@@ -83,6 +84,7 @@ export default defineComponent({
       this.authorise(shopOrigin, undefined, this.apiKey);
     },
     authorise(shop: any, host: any, apiKey: any) {
+      emitter.emit("presentLoader");
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=read_products,read_content&redirect_uri=${redirectUri}`;
 
@@ -95,7 +97,11 @@ export default defineComponent({
         });
         Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
       }
-    },
+      emitter.emit("dismissLoader");
+    }
+  },
+  beforeUnmount () {
+    emitter.emit("dismissLoader")
   },
   setup() {
     const router = useRouter();
