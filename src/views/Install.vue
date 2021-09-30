@@ -39,6 +39,7 @@ import { Redirect } from "@shopify/app-bridge/actions";
 import createApp from "@shopify/app-bridge";
 import { showToast } from "@/utils";
 import { useRouter } from "vue-router";
+import emitter from "@/event-bus"
 
 export default defineComponent({
   name: "Install",
@@ -62,15 +63,15 @@ export default defineComponent({
       this.authorise(shopOrigin, undefined, this.apiKey);
       {
         if (session) {
-          this.showToast.hideLoading();
-          this.router.navigate(["/"]);
+          emitter.emit("presentLoader");
+          this.$router.push("/");
         } else if (code) {
           const appURL = `https://${shop}/admin/apps/${this.apiKey}`;
           window.location.assign(appURL);
         } else if (shop || host) {
           this.authorise(shop, host, this.apiKey);
         } else {
-          this.showToast.hideLoading();
+          emitter.emit("dismissLoader");
         }
       }
     },
