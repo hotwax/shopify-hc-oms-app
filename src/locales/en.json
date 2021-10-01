@@ -1,6 +1,6 @@
 {
   "Automatically refund cancelled orders via Shopify.":"Automatically refund cancelled orders via Shopify.",
-  "Complete the following steps to connect this Shopify store to your Deck Commerce installation.": "Complete the following steps to connect this Shopify store to your Deck Commerce installation.",
+  "Complete the following steps to connect this Shopify store to your HotWax Commerce installation.": "Complete the following steps to connect this Shopify store to your HotWax Commerce installation.",
   "Connect Hotwax Commerce":"Connect Hotwax Commerce",
   "Connect HotWax Commerce":"Connect HotWax Commerce",
   "Connect this Shopify store to your Hotwax Commerce Instance.":"Connect this shopify store to your Hotwax Commerce Instance.",
@@ -14,7 +14,7 @@
   "Host":"Host",
   "Input text":"Input text",
   "Inventory feed from HotWax Commerce":"Inventory feed from HotWax Commerce",
-  "Map any configured shipping methods to those set up in your Deck Commerce instance.":"Map any configured shipping methods to those set up in your Deck Commerce instance.",
+  "Map any configured shipping methods to those set up in your HotWax Commerce instance.":"Map any configured shipping methods to those set up in your HotWax Commerce instance.",
   "Order Sync":"Order Sync",
   "Order Sync to Hotwax Commerce": "Order Sync to Hotwax Commerce",
   "Order Updates from Hotwax Commerce":"Order Updates from Hotwax Commerce",

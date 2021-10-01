@@ -11,7 +11,7 @@
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Shipping Method Mapping") }}</h1>
-            <h2>{{ $t("Map any configured shipping methods to those set up in your Deck Commerce instance.") }}</h2>
+            <h2>{{ $t("Map any configured shipping methods to those set up in your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label>{{ $t("Template shipment map") }}</ion-label>
               <ion-button fill="outline" color="dark" expand="block">{{ $t("Download") }}

@@ -10,7 +10,7 @@
           <ion-card-content>
             <h1>{{ $t("Getting started checklist") }}</h1>
             <h2>
-              {{ $t("Complete the following steps to connect this Shopify store to your Deck Commerce installation.") }}
+              {{ $t("Complete the following steps to connect this Shopify store to your HotWax Commerce installation.") }}
             </h2>
             <ol>
               <li>
