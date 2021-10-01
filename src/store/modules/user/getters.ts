@@ -3,17 +3,20 @@ import UserState from './UserState'
 import RootState from '@/store/RootState'
 
 const getters: GetterTree <UserState, RootState> = {
-    isAuthenticated (state) {
-        return !!state.token;
-    },
-    isUserAuthenticated(state) {
-        return state.token && state.current
-    },
-    getUserToken (state) {
-        return state.token
-    },
-    getUserProfile (state) {
-        return state.current
-    }
+  isAuthenticated (state) {
+    return !!state.token;
+  },
+  isUserAuthenticated(state) {
+    return state.token && state.current
+  },
+  getUserToken (state) {
+    return state.token
+  },
+  getUserProfile (state) {
+    return state.current
+  },
+  getRefundStatus (state) {
+    return state.refundForAutoCancelledOrders;
+  }
 }
 export default getters;

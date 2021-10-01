@@ -10,23 +10,9 @@ const userModule: Module<UserState, RootState> = {
     state: {
       token: '',
       current: null,
-      inventoryFeed: {
-        host: '',
-        port: '',
-        userName: '',
-        password: '',
-        privateKey: '',
-        directory: '',
-        fileName: '',
-        pollingFrequency: ''
-      },
-      orderUpdates: {
-        refundForAutoCancelledOrders: false
-      },
-      orderSync: {
-        templateShipmentMap: '',
-        uploadShipmentMap: ''
-      }
+      inventoryFeed: {},
+      refundForAutoCancelledOrders: false,
+      orderSync: {}
     },
     getters,
     actions,

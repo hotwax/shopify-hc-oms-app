@@ -24,12 +24,14 @@ import '@ionic/vue/css/display.css';
 import './theme/variables.css';
 
 import i18n from './i18n'
+import store from './store'
 
 
 const app = createApp(App)
   .use(IonicVue)
   .use(i18n)
-  .use(router);
+  .use(router)
+  .use(store);
   
 router.isReady().then(() => {
   app.mount('#app');
