@@ -3,6 +3,7 @@ import mutations  from './mutations'
 import getters  from './getters'
 import actions from './actions'
 import RootState from './RootState'
+import userModule from "./modules/user"
 
 
 // TODO check how to register it from the components only
@@ -19,7 +20,10 @@ const store = createStore<RootState>({
     state,
     actions,
     mutations,
-    getters
+    getters,
+    modules: {
+        'user': userModule
+    },
 })
 
 export default store
