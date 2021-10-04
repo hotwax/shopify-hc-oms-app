@@ -17,6 +17,15 @@ const getters: GetterTree <UserState, RootState> = {
   },
   getRefundStatus (state) {
     return state.refundForAutoCancelledOrders;
+  },
+  getInventoryConfig (state) {
+    return state.inventoryFeed;
+  },
+  getConnectConfig (state) {
+    return state.connectConfig;
+  },
+  getOrderConfig (state) {
+    return state.orderSync;
   }
 }
 export default getters;

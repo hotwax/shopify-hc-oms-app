@@ -6,17 +6,18 @@ import UserState from './UserState'
 import RootState from '@/store/RootState'
 
 const userModule: Module<UserState, RootState> = {
-    namespaced: true,
-    state: {
-      token: '',
-      current: null,
-      inventoryFeed: {},
-      refundForAutoCancelledOrders: false,
-      orderSync: {}
-    },
-    getters,
-    actions,
-    mutations,
+  namespaced: true,
+  state: {
+    token: '',
+    current: null,
+    inventoryFeed: {},
+    refundForAutoCancelledOrders: false,
+    orderSync: {},
+    connectConfig: {}
+  },
+  getters,
+  actions,
+  mutations,
 }
 
 export default userModule;

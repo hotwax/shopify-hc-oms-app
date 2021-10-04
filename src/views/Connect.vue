@@ -13,18 +13,18 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" >
+              <ion-input clear-input placeholder="$t(Input text)" v-model="connect.url">
               </ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Shared API Token") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="connect.token"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Site Code") }}</ion-label>
-              <ion-input></ion-input>
+              <ion-input v-model="connect.code"></ion-input>
             </ion-item>
-            <ion-button expand="block">
+            <ion-button expand="block" @click="updateConnectConfig">
               <ion-icon slot="start" :icon="saveOutline" />
               <ion-label> {{ $t("SAVE") }}</ion-label>
             </ion-button>
@@ -52,6 +52,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline, closeOutline } from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
 
 export default defineComponent({
   name: "Connect",
@@ -68,11 +69,32 @@ export default defineComponent({
     IonLabel,
     IonPage,
   },
-  setup() {
+  data () {
     return {
-       arrowBackOutline,
-       saveOutline,
-       closeOutline
+      connect: {}
+    }
+  },
+  computed: {
+    ...mapGetters({
+      connectConfig: 'user/getConnectConfig'
+    })
+  },
+  mounted () {
+    this.connect = this.connectConfig
+  },
+  methods: {
+    updateConnectConfig () {
+      this.store.dispatch('user/updateConnectConfiguration', this.connect)
+    }
+  },
+  setup() {
+    const store = useStore();
+    
+    return {
+      store,
+      arrowBackOutline,
+      saveOutline,
+      closeOutline
     };
   }
 });

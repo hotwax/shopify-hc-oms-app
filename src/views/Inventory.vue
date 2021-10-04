@@ -8,7 +8,7 @@
       </ion-fab> 
       <h2 class="header">{{ $t("Inventory feed from HotWax Commerce") }}</h2>
       <div class="content">
-        <ion-button expand="block">
+        <ion-button expand="block" @click="updateInventorySettings">
           <ion-icon slot="start" :icon="saveOutline"/>
           <ion-label> {{ $t("SAVE") }}</ion-label>
         </ion-button>
@@ -17,23 +17,23 @@
             <h2>{{ $t("HotWax Commerce provides an inventory feed by dropping an XML file on an SFTP server. Set up your Shopify's store connection to the SFTP server to receive the inventory feed.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Host") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="inventory.host"></ion-input>
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("Port") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="inventory.port"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("User Name") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="inventory.userName"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Password") }}</ion-label>
-              <ion-input></ion-input>
+              <ion-input v-model="inventory.password"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Private Key") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)">
+              <ion-input clear-input placeholder="$t(Input text)" v-model="inventory.privateKey">
               </ion-input>
             </ion-item>
           </ion-card-content>
@@ -43,11 +43,11 @@
             <h2>{{ $t("Set up where to find the inventory feed on the SFTP server.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Directory") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="inventory.directory"></ion-input>
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("File Name") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="inventory.fileName"></ion-input>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -56,7 +56,7 @@
             <h2>{{ $t("Set up how frequently you want Shopify to look for the inventory feed file. You should schedule this similarity to your settings for HotWax Commerce dropping the file.") }}</h2>
             <ion-item>
               <ion-label>{{ $t("Polling Frequency") }}</ion-label>
-              <ion-select value="15 min">
+              <ion-select v-model="inventory.value">
                 <!-- TODO: We can add more select options here -->
                 <ion-select-option value="15 min">15 min</ion-select-option>
                 <ion-select-option value="30 min">30 min</ion-select-option>
@@ -88,6 +88,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline} from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
 
 export default defineComponent({
   name: "Inventory",
@@ -106,10 +107,31 @@ export default defineComponent({
     IonSelect,
     IonSelectOption
   },
-  setup() {
+  data () {
     return {
-       arrowBackOutline,
-       saveOutline,
+      inventory: {}
+    }
+  },
+  computed: {
+    ...mapGetters({
+      inventoryConfig: 'user/getInventoryConfig'
+    })
+  },
+  mounted () {
+    this.inventory = this.inventoryConfig
+  },
+  methods: {
+    updateInventorySettings () {
+      this.store.dispatch('user/updateInventoryConfiguration', this.inventory)
+    }
+  },
+  setup() {
+    const store = useStore();
+
+    return {
+      store,
+      arrowBackOutline,
+      saveOutline,
     };
   }
 });

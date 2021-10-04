@@ -20,7 +20,7 @@
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Upload shipment map") }}</ion-label>
-              <ion-button color="default" fill="outline" expand="block">{{ $t("Upload") }}
+              <ion-button color="default" fill="outline" expand="block" @click="updateOrderConfig">{{ $t("Upload") }}
                 <ion-icon slot="end" :icon="cloudUploadOutline"/>
               </ion-button>
             </ion-item>
@@ -46,6 +46,7 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, downloadOutline, cloudUploadOutline } from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
 
 export default defineComponent({
   name: "Sync",
@@ -61,11 +62,32 @@ export default defineComponent({
     IonLabel,
     IonPage
   },
-  setup() {
+  data () {
     return {
-       arrowBackOutline,
-       downloadOutline,
-       cloudUploadOutline
+      order: {}
+    }
+  },
+  computed: {
+    ...mapGetters({
+      orderConfig: 'user/getOrderConfig'
+    })
+  },
+  mounted () {
+    this.order = this.orderConfig
+  },
+  methods: {
+    updateOrderConfig () {
+      this.store.dispatch('user/updateOrderConfiguration', this.order)
+    }
+  },
+  setup() {
+    const store = useStore();
+
+    return {
+      store,
+      arrowBackOutline,
+      downloadOutline,
+      cloudUploadOutline
     };
   }
 });

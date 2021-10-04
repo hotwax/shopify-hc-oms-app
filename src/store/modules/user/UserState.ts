@@ -4,4 +4,5 @@ export default interface UserState {
   inventoryFeed: object | null;
   refundForAutoCancelledOrders: boolean;
   orderSync: object | null;
+  connectConfig: object | null;
 }
