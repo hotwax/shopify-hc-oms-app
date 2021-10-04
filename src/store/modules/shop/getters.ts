@@ -1,19 +1,10 @@
 import { GetterTree } from 'vuex'
-import UserState from './UserState'
+import ShopState from './ShopState'
 import RootState from '@/store/RootState'
 
-const getters: GetterTree <UserState, RootState> = {
-  isAuthenticated (state) {
-    return !!state.token;
-  },
-  isUserAuthenticated(state) {
-    return state.token && state.current
-  },
-  getUserToken (state) {
+const getters: GetterTree <ShopState, RootState> = {
+  getShopToken (state) {
     return state.token
-  },
-  getUserProfile (state) {
-    return state.current
   },
   getRefundStatus (state) {
     return state.refundForAutoCancelledOrders;

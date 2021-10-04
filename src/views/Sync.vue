@@ -69,7 +69,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      orderConfig: 'user/getOrderConfig'
+      orderConfig: 'shop/getOrderConfig'
     })
   },
   mounted () {
@@ -77,7 +77,7 @@ export default defineComponent({
   },
   methods: {
     updateOrderConfig () {
-      this.store.dispatch('user/updateOrderConfiguration', this.order)
+      this.store.dispatch('shop/updateOrderConfiguration', this.order)
     }
   },
   setup() {

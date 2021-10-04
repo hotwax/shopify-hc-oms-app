@@ -1,6 +1,5 @@
-export default interface UserState {
+export default interface ShopState {
   token: string;
-  current: object | null;
   inventoryFeed: object | null;
   refundForAutoCancelledOrders: boolean;
   orderSync: object | null;

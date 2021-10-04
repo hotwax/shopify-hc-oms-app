@@ -56,7 +56,7 @@
             <h2>{{ $t("Set up how frequently you want Shopify to look for the inventory feed file. You should schedule this similarity to your settings for HotWax Commerce dropping the file.") }}</h2>
             <ion-item>
               <ion-label>{{ $t("Polling Frequency") }}</ion-label>
-              <ion-select v-model="inventory.value">
+              <ion-select :v-model="inventory.value">
                 <!-- TODO: We can add more select options here -->
                 <ion-select-option value="15 min">15 min</ion-select-option>
                 <ion-select-option value="30 min">30 min</ion-select-option>
@@ -114,7 +114,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      inventoryConfig: 'user/getInventoryConfig'
+      inventoryConfig: 'shop/getInventoryConfig'
     })
   },
   mounted () {
@@ -122,7 +122,7 @@ export default defineComponent({
   },
   methods: {
     updateInventorySettings () {
-      this.store.dispatch('user/updateInventoryConfiguration', this.inventory)
+      this.store.dispatch('shop/updateInventoryConfiguration', this.inventory)
     }
   },
   setup() {

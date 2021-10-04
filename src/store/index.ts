@@ -3,13 +3,13 @@ import mutations  from './mutations'
 import getters  from './getters'
 import actions from './actions'
 import RootState from './RootState'
-import userModule from "./modules/user"
+import shopModule from "./modules/shop"
 import createPersistedState from "vuex-persistedstate";
 
 
 // TODO check how to register it from the components only
 // Handle same module registering multiple time on page refresh
-//store.registerModule('user', userModule);
+//store.registerModule('shop', shopModule);
 
 
 const state: any = {
@@ -17,7 +17,7 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: ['user'],
+    paths: ['shop'],
     fetchBeforeUse: true
 })
 
@@ -29,7 +29,7 @@ const store = createStore<RootState>({
     getters,
     plugins: [ persistState ],
     modules: {
-        'user': userModule
+        'shop': shopModule
     },
 })
 

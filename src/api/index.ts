@@ -9,7 +9,7 @@ import {
 import router from '@/router'
 
 axios.interceptors.request.use((config: any) => {
-    const token = store.getters['user/getUserToken'];
+    const token = store.getters['shop/getUserToken'];
     if (token) {
         config.headers.Authorization =  'Bearer ' + token;
         config.headers['Content-Type'] = 'application/json';

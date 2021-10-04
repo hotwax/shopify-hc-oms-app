@@ -1,13 +1,10 @@
 import { MutationTree } from 'vuex'
-import UserState from './UserState'
+import ShopState from './ShopState'
 import * as types from './mutation-types'
 
-const mutations: MutationTree <UserState> = {
-  [types.USER_TOKEN_CHANGED] (state, payload) {
+const mutations: MutationTree <ShopState> = {
+  [types.SHOP_TOKEN_CHANGED] (state, payload) {
     state.token = payload.newToken
-  },
-  [types.USER_INFO_UPDATED] (state, payload) {
-    state.current = payload
   },
   [types.REFUND_STATUS_CHANGED] (state, payload) {
     state.refundForAutoCancelledOrders = payload.status;

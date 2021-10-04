@@ -76,7 +76,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      connectConfig: 'user/getConnectConfig'
+      connectConfig: 'shop/getConnectConfig'
     })
   },
   mounted () {
@@ -84,7 +84,7 @@ export default defineComponent({
   },
   methods: {
     updateConnectConfig () {
-      this.store.dispatch('user/updateConnectConfiguration', this.connect)
+      this.store.dispatch('shop/updateConnectConfiguration', this.connect)
     }
   },
   setup() {

@@ -65,7 +65,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      refundOnOrderCancelled: 'user/getRefundStatus'
+      refundOnOrderCancelled: 'shop/getRefundStatus'
     })
   },
   created () {
@@ -76,7 +76,7 @@ export default defineComponent({
       this.status = !this.status;
     },
     saveRefundStatus () {
-      this.store.commit('user/user/REFUND_STATUS_CHANGED', {status: this.status})
+      this.store.commit('shop/shop/REFUND_STATUS_CHANGED', {status: this.status})
     }
   },
   setup() {

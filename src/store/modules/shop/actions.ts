@@ -1,9 +1,9 @@
 import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
-import UserState from './UserState'
+import ShopState from './ShopState'
 import * as types from './mutation-types'
 
-const actions: ActionTree<UserState, RootState> = {
+const actions: ActionTree<ShopState, RootState> = {
 
   async refundOnCancelledOrderUpdate ({ state }) {
     state.refundForAutoCancelledOrders = !state.refundForAutoCancelledOrders
