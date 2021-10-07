@@ -47,6 +47,7 @@ import {
 import { defineComponent } from "vue";
 import { arrowBackOutline, downloadOutline, cloudUploadOutline } from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils'
 
 export default defineComponent({
   name: "Sync",
@@ -70,12 +71,14 @@ export default defineComponent({
   methods: {
     updateOrderConfig () {
       this.store.dispatch('shop/updateOrderConfiguration', this.orderConfig)
+      showToast('HotWax Commerce sync settings updated')
     }
   },
   setup() {
     const store = useStore();
 
     return {
+      showToast,
       store,
       arrowBackOutline,
       downloadOutline,

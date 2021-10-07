@@ -42,6 +42,7 @@ import {
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline } from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils';
 
 export default defineComponent({
   name: "Update",
@@ -77,11 +78,13 @@ export default defineComponent({
     },
     saveRefundStatus () {
       this.store.commit('shop/shop/REFUND_STATUS_CHANGED', {status: this.status})
+      showToast('HotWax Commerce refund status updated')
     }
   },
   setup() {
     const store = useStore();
     return {
+      showToast,
       store,
       arrowBackOutline,
       saveOutline

@@ -53,6 +53,7 @@ import {
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline, closeOutline } from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils'
 
 export default defineComponent({
   name: "Connect",
@@ -77,12 +78,14 @@ export default defineComponent({
   methods: {
     updateConnectConfig () {
       this.store.dispatch('shop/updateConnectConfiguration', this.connectConfig)
+      showToast('HotWax Commerce connection settings updated')
     }
   },
   setup() {
     const store = useStore();
     
     return {
+      showToast,
       store,
       arrowBackOutline,
       saveOutline,
