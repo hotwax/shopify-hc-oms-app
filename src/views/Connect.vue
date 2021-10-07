@@ -13,16 +13,16 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" v-model="connect.url">
+              <ion-input clear-input placeholder="$t(Input text)" v-model="connectConfig.url">
               </ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Shared API Token") }}</ion-label>
-              <ion-input v-model="connect.token"></ion-input>
+              <ion-input v-model="connectConfig.token"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Site Code") }}</ion-label>
-              <ion-input v-model="connect.code"></ion-input>
+              <ion-input v-model="connectConfig.code"></ion-input>
             </ion-item>
             <ion-button expand="block" @click="updateConnectConfig">
               <ion-icon slot="start" :icon="saveOutline" />
@@ -69,22 +69,14 @@ export default defineComponent({
     IonLabel,
     IonPage,
   },
-  data () {
-    return {
-      connect: {}
-    }
-  },
   computed: {
     ...mapGetters({
       connectConfig: 'shop/getConnectConfig'
     })
   },
-  mounted () {
-    this.connect = this.connectConfig
-  },
   methods: {
     updateConnectConfig () {
-      this.store.dispatch('shop/updateConnectConfiguration', this.connect)
+      this.store.dispatch('shop/updateConnectConfiguration', this.connectConfig)
     }
   },
   setup() {

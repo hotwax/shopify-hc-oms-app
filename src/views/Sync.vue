@@ -62,22 +62,14 @@ export default defineComponent({
     IonLabel,
     IonPage
   },
-  data () {
-    return {
-      order: {}
-    }
-  },
   computed: {
     ...mapGetters({
       orderConfig: 'shop/getOrderConfig'
     })
   },
-  mounted () {
-    this.order = this.orderConfig
-  },
   methods: {
     updateOrderConfig () {
-      this.store.dispatch('shop/updateOrderConfiguration', this.order)
+      this.store.dispatch('shop/updateOrderConfiguration', this.orderConfig)
     }
   },
   setup() {
