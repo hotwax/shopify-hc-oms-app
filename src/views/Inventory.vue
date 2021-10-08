@@ -90,6 +90,7 @@ import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline} from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
+import { translate } from '@/i18n'
 
 export default defineComponent({
   name: "Inventory",
@@ -116,7 +117,7 @@ export default defineComponent({
   methods: {
     updateInventorySettings () {
       this.store.dispatch('shop/updateInventoryConfiguration', this.inventoryConfig)
-      showToast('HotWax Commerce inventory settings updated')
+      showToast(translate('HotWax Commerce inventory settings updated'))
     }
   },
   setup() {
