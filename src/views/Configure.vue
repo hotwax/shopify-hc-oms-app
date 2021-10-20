@@ -64,6 +64,7 @@
 </template>
 
 <script lang="ts">
+import services from "@/services";
 import {
   IonButton,
   IonCard,
@@ -82,6 +83,13 @@ export default defineComponent({
     IonContent,
     IonPage,
   },
+  async mounted () {
+    await services.getConfiguration({
+      "session": "d815c7c25a490a2ab4c40c7eee956430823482fbf65ae3017375c51128ab2400",
+      "clientId": process.env.VUE_APP_SHOPIFY_API_KEY,
+      "shop": this.$route.params.shopOrigin
+    }).then(resp => console.log(resp))
+  }
 });
 </script>
 

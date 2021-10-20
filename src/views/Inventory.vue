@@ -111,12 +111,12 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      inventoryConfig: 'shop/getInventoryConfig'
+      inventoryConfig: 'shop/getConfig'
     })
   },
   methods: {
     updateInventorySettings () {
-      this.store.dispatch('shop/updateInventoryConfiguration', this.inventoryConfig)
+      this.store.dispatch('shop/setConfiguration', this.inventoryConfig)
       showToast(translate('HotWax Commerce inventory settings updated'))
     }
   },

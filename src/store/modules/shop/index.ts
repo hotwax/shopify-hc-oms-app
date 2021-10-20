@@ -9,10 +9,7 @@ const shopModule: Module<ShopState, RootState> = {
   namespaced: true,
   state: {
     token: '',
-    inventoryFeed: {},
-    refundForAutoCancelledOrders: false,
-    orderSync: {},
-    connectConfig: {}
+    config: {}
   },
   getters,
   actions,

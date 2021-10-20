@@ -71,7 +71,7 @@ export default defineComponent({
   },
   methods: {
     updateOrderConfig () {
-      this.store.dispatch('shop/updateOrderConfiguration', this.orderConfig)
+      this.store.dispatch('shop/setConfiguration', this.orderConfig)
       showToast(translate('HotWax Commerce sync settings updated'))
     }
   },

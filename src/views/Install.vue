@@ -72,9 +72,20 @@ export default defineComponent({
     if (this.session) {
       this.$router.push("/");
     } else if (this.code) {
-      await services.generateAccessToken({key: this.code}).then(resp => resp.json()).catch(err => console.warn(err));
-      const appURL = `https://${this.shop}/admin/apps/${this.apiKey}`;
-      window.location.assign(appURL);
+      const shop = this.shop || this.shopOrigin
+      const status = await services.generateAccessToken({
+        "code": this.code,
+        "shop": "hc-sandbox.myshopify.com",
+        "clientId": this.apiKey,
+        "host": this.host,
+        "hmac": this.hmac,
+        "timestamp": this.timestamp
+      }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
+      // TODO: Add error message to the UI when status is false or there is some error in the resp
+      if (status) {
+        const appURL = `https://${shop}/admin/apps/${this.apiKey}`;
+        window.location.assign(appURL);
+      }
     } else if (this.shop || this.host) {
       this.authorise(this.shop, this.host, this.apiKey);
     }

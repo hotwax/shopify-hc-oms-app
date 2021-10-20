@@ -78,7 +78,7 @@ export default defineComponent({
       this.status = !this.status;
     },
     saveRefundStatus () {
-      this.store.commit('shop/shop/REFUND_STATUS_CHANGED', {status: this.status})
+      this.store.dispatch('shop/setConfiguration', this.status)
       showToast(translate('HotWax Commerce refund status updated'))
     }
   },

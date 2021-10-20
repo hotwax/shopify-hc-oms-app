@@ -5,7 +5,7 @@
         <ion-fab-button color="medium" href="/configure">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
-      </ion-fab> 
+      </ion-fab>
       <h2 class="header">{{ $t("Connect HotWax Commerce") }}</h2>
       <div class="content">
         <ion-card>
@@ -78,7 +78,7 @@ export default defineComponent({
   },
   methods: {
     updateConnectConfig () {
-      this.store.dispatch('shop/updateConnectConfiguration', this.connectConfig)
+      this.store.dispatch('shop/setConfiguration', this.connectConfig)
       showToast(translate('HotWax Commerce connection settings updated'))
     }
   },
