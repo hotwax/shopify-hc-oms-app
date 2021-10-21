@@ -6,20 +6,34 @@ import services from '@/services'
 import { hasError, showToast } from '@/utils'
 
 const actions: ActionTree<ShopState, RootState> = {
+  setShopToken({ commit }, payload) {
+    commit(types.SHOP_TOKEN_UPDATED, { token: payload.token })
+  },
   async setConfiguration ({ commit }, payload) {
     let resp;
 
     try {
       resp = await services.setConfiguration(payload)
-      console.log(resp)
-      // resp.data.response.numFound tells the number of items in the response
+      // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
-        console.log(resp.data)
-        // let products = resp.data;
-        // const totalProductsCount = resp.data.response.numFound;
+        commit(types.CONFIG_UPDATED, { config: payload })
+      } else {
+        // TODO
+      }
+    } catch(error){
+      console.log(error)
+      // TODO showToast(translate("Something went wrong"));
+    }
+    // TODO Handle specific error
+    return resp;
+  },
+  async getConfiguration ({ commit }, payload) {
+    let resp;
 
-        // if (payload.viewIndex && payload.viewIndex > 0) products = state.products.list.concat(products)
-        // commit(types.CONFIG_UPDATED, { config: payload })
+    try {
+      resp = await services.getConfiguration(payload)
+      if (resp.status === 200 && !hasError(resp)) {
+        commit(types.CONFIG_UPDATED, { config: resp.data })
       } else {
         //showing error whenever getting no products in the response or having any other error
         // showToast(translate("Product not found"));
@@ -30,6 +44,9 @@ const actions: ActionTree<ShopState, RootState> = {
     }
     // TODO Handle specific error
     return resp;
+  },
+  setShop({ commit }, payload) {
+    commit(types.SHOP_UPDATED, { shop: payload.shop })
   }
 }
 export default actions;

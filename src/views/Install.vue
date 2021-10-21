@@ -43,6 +43,9 @@ import { showToast } from "@/utils";
 import { useRouter } from "vue-router";
 import emitter from "@/event-bus"
 import services from "@/services"
+import { getSessionToken } from "@shopify/app-bridge-utils";
+import { useStore } from "vuex";
+
 
 export default defineComponent({
   name: "Install",
@@ -62,20 +65,39 @@ export default defineComponent({
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
       shop: this.$route.query['shopOrigin'],
-      host: this.$route.query['host'],
+      host: this.$route.query['host'] as string,
       locale: this.$route.query['locale'] || process.env.VUE_APP_I18N_LOCALE || process.env.VUE_APP_I18N_FALLBACK_LOCALE,
       timestamp: this.$route.query['timestamp'],
       code: this.$route.query['code']
     };
   },
   async mounted () {
+    const shop = this.shop || this.shopOrigin
+    this.store.dispatch('shop/setShop', {
+        "shop": shop
+      })
     if (this.session) {
-      this.$router.push("/");
+      const app = createApp({
+        apiKey: this.apiKey,
+        host: this.host,
+      });
+      const sessionToken = await getSessionToken(app);
+      this.store.dispatch('shop/setShopToken', {
+          "token": sessionToken
+        })
+
+      const resp = await this.store.dispatch('shop/getConfiguration', {
+        "session": sessionToken,
+        "clientId": process.env.VUE_APP_SHOPIFY_API_KEY,
+        "shop": shop
+      })
+      if (resp.status) {
+        this.$router.push("/configure");
+      }
     } else if (this.code) {
-      const shop = this.shop || this.shopOrigin
       const status = await services.generateAccessToken({
         "code": this.code,
-        "shop": "hc-sandbox.myshopify.com",
+        "shop": shop,
         "clientId": this.apiKey,
         "host": this.host,
         "hmac": this.hmac,
@@ -87,7 +109,7 @@ export default defineComponent({
         window.location.assign(appURL);
       }
     } else if (this.shop || this.host) {
-      this.authorise(this.shop, this.host, this.apiKey);
+      this.authorise(shop, this.host, this.apiKey);
     }
   },
   methods: {
@@ -97,6 +119,7 @@ export default defineComponent({
     authorise(shop: any, host: any, apiKey: any) {
       emitter.emit("presentLoader");
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
+      // TODO Pass scope from configuration
       const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=read_products,read_content&redirect_uri=${redirectUri}`;
 
       if (window.top == window.self) {
@@ -115,9 +138,11 @@ export default defineComponent({
     emitter.emit("dismissLoader")
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
     return {
       router,
+      store,
       showToast,
     };
   },

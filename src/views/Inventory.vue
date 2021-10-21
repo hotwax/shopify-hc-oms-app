@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
-        <ion-fab-button color="medium" href="/configure">
+        <ion-fab-button color="medium"  @click="() => router.push('/configure')">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
@@ -17,23 +17,23 @@
             <h2>{{ $t("HotWax Commerce provides an inventory feed by dropping an XML file on an SFTP server. Set up your Shopify's store connection to the SFTP server to receive the inventory feed.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Host") }}</ion-label>
-              <ion-input v-model="inventoryConfig.host"></ion-input>
+              <ion-input v-model="host"></ion-input>
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("Port") }}</ion-label>
-              <ion-input v-model="inventoryConfig.port"></ion-input>
+              <ion-input v-model="port"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("User Name") }}</ion-label>
-              <ion-input v-model="inventoryConfig.userName"></ion-input>
+              <ion-input v-model="username"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Password") }}</ion-label>
-              <ion-input v-model="inventoryConfig.password"></ion-input>
+              <ion-input v-model="password"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Private Key") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" v-model="inventoryConfig.privateKey">
+              <ion-input clear-input placeholder="$t(Input text)" v-model="privateKey">
               </ion-input>
             </ion-item>
           </ion-card-content>
@@ -43,11 +43,11 @@
             <h2>{{ $t("Set up where to find the inventory feed on the SFTP server.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Directory") }}</ion-label>
-              <ion-input v-model="inventoryConfig.directory"></ion-input>
+              <ion-input v-model="directory"></ion-input>
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("File Name") }}</ion-label>
-              <ion-input v-model="inventoryConfig.fileName"></ion-input>
+              <ion-input v-model="fileName"></ion-input>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -91,6 +91,7 @@ import { arrowBackOutline, saveOutline} from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { translate } from '@/i18n'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: "Inventory",
@@ -109,26 +110,49 @@ export default defineComponent({
     IonSelect,
     IonSelectOption
   },
+  data() {
+    return {
+      host: '',
+      port: '',
+      username: '',
+      password: ''
+    }
+  },
   computed: {
     ...mapGetters({
-      inventoryConfig: 'shop/getConfig'
+      inventoryConfig: 'shop/getConfig',
+      shop: 'shop/getShop',
+      token: 'shop/getShopToken',
     })
   },
   methods: {
     updateInventorySettings () {
-      this.store.dispatch('shop/setConfiguration', this.inventoryConfig)
+      const payload = {
+        port: this.port,
+        shop: this.shop,
+        username: this.username,
+        password: this.password,
+        clientId: process.env.VUE_APP_SHOPIFY_API_KEY,
+        session: this.token
+      }
+      this.store.dispatch('shop/setConfiguration', payload)
       showToast(translate('HotWax Commerce inventory settings updated'))
     }
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     return {
+      router,
       showToast,
       store,
       arrowBackOutline,
       saveOutline,
     };
+  },
+  mounted() {
+    this.port = this.inventoryConfig.port;
   }
 });
 </script>

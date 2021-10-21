@@ -10,7 +10,7 @@ import Install from '@/views/Install.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/configure'
+    redirect: '/install'
   },
   {
     path: '/configure',

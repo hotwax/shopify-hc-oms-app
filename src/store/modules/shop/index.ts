@@ -9,7 +9,8 @@ const shopModule: Module<ShopState, RootState> = {
   namespaced: true,
   state: {
     token: '',
-    config: {}
+    config: {},
+    shop: ''
   },
   getters,
   actions,
