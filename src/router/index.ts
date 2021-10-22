@@ -5,11 +5,12 @@ import Connect from '../views/Connect.vue'
 import Inventory from '../views/Inventory.vue'
 import Sync from '../views/Sync.vue'
 import Update from '../views/Update.vue'
+import Install from '@/views/Install.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/configure'
+    redirect: '/install'
   },
   {
     path: '/configure',
@@ -35,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/update',
     name: 'Update',
     component: Update
+  },
+  {
+    path: '/install',
+    name: 'Install',
+    component: Install
   }
 ]
 

@@ -5,7 +5,7 @@
         <ion-fab-button color="medium" href="/configure">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
-      </ion-fab> 
+      </ion-fab>
       <h2 class="header">{{ $t("Connect HotWax Commerce") }}</h2>
       <div class="content">
         <ion-card>
@@ -13,18 +13,18 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" >
+              <ion-input clear-input placeholder="$t(Input text)" v-model="connectConfig.url">
               </ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Shared API Token") }}</ion-label>
-              <ion-input ></ion-input>
+              <ion-input v-model="connectConfig.token"></ion-input>
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Site Code") }}</ion-label>
-              <ion-input></ion-input>
+              <ion-input v-model="connectConfig.code"></ion-input>
             </ion-item>
-            <ion-button expand="block">
+            <ion-button expand="block" @click="updateConnectConfig">
               <ion-icon slot="start" :icon="saveOutline" />
               <ion-label> {{ $t("SAVE") }}</ion-label>
             </ion-button>
@@ -52,6 +52,9 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline, closeOutline } from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils'
+import { translate } from '@/i18n'
 
 export default defineComponent({
   name: "Connect",
@@ -68,11 +71,26 @@ export default defineComponent({
     IonLabel,
     IonPage,
   },
+  computed: {
+    ...mapGetters({
+      connectConfig: 'shop/getConnectConfig'
+    })
+  },
+  methods: {
+    updateConnectConfig () {
+      this.store.dispatch('shop/setConfiguration', this.connectConfig)
+      showToast(translate('HotWax Commerce connection settings updated'))
+    }
+  },
   setup() {
+    const store = useStore();
+    
     return {
-       arrowBackOutline,
-       saveOutline,
-       closeOutline
+      showToast,
+      store,
+      arrowBackOutline,
+      saveOutline,
+      closeOutline
     };
   }
 });

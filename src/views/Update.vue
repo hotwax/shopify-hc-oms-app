@@ -8,7 +8,7 @@
       </ion-fab> 
       <h2 class="header">{{ $t("Updates from HotWax Commerce") }}</h2>
       <div class="content">
-        <ion-button expand="block">
+        <ion-button expand="block" @click="saveRefundStatus()">
           <ion-icon slot="start" :icon="saveOutline"/>
           <ion-label> {{ $t("SAVE") }}</ion-label>
         </ion-button>
@@ -16,7 +16,7 @@
           <ion-card-content>
             <ion-item lines="none">
               <h2>{{ $t("Automatically refund cancelled orders via Shopify.") }}</h2>
-              <ion-toggle slot="end" name="Switch" checked></ion-toggle>
+              <ion-toggle slot="end" name="Switch" @ionChange="refundStatusChanged()" :checked="refundOnOrderCancelled"></ion-toggle>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -41,6 +41,9 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline } from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils';
+import { translate } from '@/i18n'
 
 export default defineComponent({
   name: "Update",
@@ -57,10 +60,35 @@ export default defineComponent({
     IonPage,
     IonToggle
   },
-  setup() {
+  data () {
     return {
-       arrowBackOutline,
-       saveOutline
+      status: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      refundOnOrderCancelled: 'shop/getRefundStatus'
+    })
+  },
+  created () {
+    this.status = this.refundOnOrderCancelled;
+  },
+  methods: {
+    refundStatusChanged () {
+      this.status = !this.status;
+    },
+    saveRefundStatus () {
+      this.store.dispatch('shop/setConfiguration', this.status)
+      showToast(translate('HotWax Commerce refund status updated'))
+    }
+  },
+  setup() {
+    const store = useStore();
+    return {
+      showToast,
+      store,
+      arrowBackOutline,
+      saveOutline
     };
   }
 });

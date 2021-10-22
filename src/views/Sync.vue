@@ -11,7 +11,7 @@
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Shipping Method Mapping") }}</h1>
-            <h2>{{ $t("Map any configured shipping methods to those set up in your Deck Commerce instance.") }}</h2>
+            <h2>{{ $t("Map any configured shipping methods to those set up in your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label>{{ $t("Template shipment map") }}</ion-label>
               <ion-button fill="outline" color="dark" expand="block">{{ $t("Download") }}
@@ -20,7 +20,7 @@
             </ion-item>
             <ion-item>
               <ion-label>{{ $t("Upload shipment map") }}</ion-label>
-              <ion-button color="default" fill="outline" expand="block">{{ $t("Upload") }}
+              <ion-button color="default" fill="outline" expand="block" @click="updateOrderConfig">{{ $t("Upload") }}
                 <ion-icon slot="end" :icon="cloudUploadOutline"/>
               </ion-button>
             </ion-item>
@@ -46,6 +46,9 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, downloadOutline, cloudUploadOutline } from 'ionicons/icons'
+import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils'
+import { translate } from '@/i18n'
 
 export default defineComponent({
   name: "Sync",
@@ -61,11 +64,26 @@ export default defineComponent({
     IonLabel,
     IonPage
   },
+  computed: {
+    ...mapGetters({
+      orderConfig: 'shop/getOrderConfig'
+    })
+  },
+  methods: {
+    updateOrderConfig () {
+      this.store.dispatch('shop/setConfiguration', this.orderConfig)
+      showToast(translate('HotWax Commerce sync settings updated'))
+    }
+  },
   setup() {
+    const store = useStore();
+
     return {
-       arrowBackOutline,
-       downloadOutline,
-       cloudUploadOutline
+      showToast,
+      store,
+      arrowBackOutline,
+      downloadOutline,
+      cloudUploadOutline
     };
   }
 });
