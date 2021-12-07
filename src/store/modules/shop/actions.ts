@@ -3,7 +3,7 @@ import RootState from '@/store/RootState'
 import ShopState from './ShopState'
 import * as types from './mutation-types'
 import services from '@/services'
-import { hasError, showToast } from '@/utils'
+import { hasError } from '@/utils'
 
 const actions: ActionTree<ShopState, RootState> = {
   setShopToken({ commit }, payload) {
