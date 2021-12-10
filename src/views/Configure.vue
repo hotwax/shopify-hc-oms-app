@@ -55,7 +55,7 @@
           <ion-card-content>
             <h1>{{ $t("Order Sync to Hotwax Commerce") }}</h1>
             <h2>{{ $t("The order sync to Shopify is currently inactive.") }}</h2>
-            <ion-button  @click="() => router.push('/Sync')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button disabled  @click="() => router.push('/Sync')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
       </div>
