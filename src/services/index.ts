@@ -24,9 +24,17 @@ const getConfiguration = async (query: any): Promise <any> => {
     params: query
   })
 }
+const getApiKey = async (query: any): Promise <any> => {
+  return api({
+    url: "/api-key",
+    method: "get",
+    params: query
+  })
+}
 
-export default {
+export {
   generateAccessToken,
+  getApiKey,
   setConfiguration,
   getConfiguration
 }

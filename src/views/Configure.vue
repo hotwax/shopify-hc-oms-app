@@ -41,14 +41,14 @@
           <ion-card-content>
             <h1>{{ $t("Set up inventory feed") }}</h1>
             <h2>{{ $t("The inventory feed sync to Shopify is currently inactive.") }}</h2>
-            <ion-button  @click="() => router.push('/Inventory')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button disabled @click="() => router.push('/Inventory')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>
           <ion-card-content>
             <h1>{{ $t("Order Updates from Hotwax Commerce") }}</h1>
             <h2>{{ $t("The order update sync to Shopify is currently inactive.") }}</h2>
-            <ion-button  @click="() => router.push('/Update')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <ion-button disabled @click="() => router.push('/Update')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
           </ion-card-content>
         </ion-card>
         <ion-card>

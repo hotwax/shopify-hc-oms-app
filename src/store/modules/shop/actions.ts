@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex'
 import RootState from '@/store/RootState'
 import ShopState from './ShopState'
 import * as types from './mutation-types'
-import services from '@/services'
+import { getConfiguration, setConfiguration, } from '@/services'
 import { hasError } from '@/utils'
 
 const actions: ActionTree<ShopState, RootState> = {
@@ -13,7 +13,7 @@ const actions: ActionTree<ShopState, RootState> = {
     let resp;
 
     try {
-      resp = await services.setConfiguration(payload)
+      resp = await setConfiguration(payload)
       // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
         commit(types.CONFIG_UPDATED, { config: payload })
@@ -31,7 +31,7 @@ const actions: ActionTree<ShopState, RootState> = {
     let resp;
 
     try {
-      resp = await services.getConfiguration(payload)
+      resp = await getConfiguration(payload)
       if (resp.status === 200 && !hasError(resp)) {
         commit(types.CONFIG_UPDATED, { config: resp.data })
       } else {
