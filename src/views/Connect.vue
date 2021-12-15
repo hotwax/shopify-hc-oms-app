@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
-        <ion-fab-button color="medium" href="/configure">
+        <ion-fab-button color="medium" @click="() => router.push('/configure')">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -13,7 +13,7 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" v-model="connectConfig.url">
+              <ion-input v-model="connectConfig.url">
               </ion-input>
             </ion-item>
             <ion-item>
@@ -55,6 +55,7 @@ import { arrowBackOutline, saveOutline, closeOutline } from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils'
 import { translate } from '@/i18n'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: "Connect",
@@ -73,7 +74,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      connectConfig: 'shop/getConnectConfig'
+      connectConfig: 'shop/getConfig'
     })
   },
   methods: {
@@ -84,8 +85,10 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     
     return {
+      router,
       showToast,
       store,
       arrowBackOutline,

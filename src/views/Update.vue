@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
       <ion-fab >
-        <ion-fab-button color="medium" href="/configure">
+        <ion-fab-button color="medium" @click="() => router.push('/configure')">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab> 
@@ -44,6 +44,7 @@ import { arrowBackOutline, saveOutline } from 'ionicons/icons'
 import { mapGetters, useStore } from "vuex";
 import { showToast } from '@/utils';
 import { translate } from '@/i18n'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: "Update",
@@ -84,7 +85,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     return {
+      router,
       showToast,
       store,
       arrowBackOutline,
