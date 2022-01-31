@@ -6,7 +6,7 @@
         then redirect to shopify -->
         <form>
           <ion-list>
-            <img src="../assets/images/hc.png" />
+            <Logo />
             <ion-item>
               <ion-label position="floating">Shop</ion-label>
               <ion-input
@@ -47,6 +47,7 @@ import emitter from "@/event-bus"
 import { generateAccessToken, getApiKey } from "@/services"
 import { getSessionToken } from "@shopify/app-bridge-utils";
 import { useStore } from "vuex";
+import Logo from '@/components/Logo.vue';
 
 
 export default defineComponent({
@@ -59,6 +60,7 @@ export default defineComponent({
     IonLabel,
     IonList,
     IonPage,
+    Logo
   },
   data() {
     return {
@@ -177,10 +179,5 @@ export default defineComponent({
 
 form {
   max-width: 375px;
-}
-
-img {
-  margin-bottom: 25px;
-  padding: 16px;
 }
 </style>
