@@ -2,7 +2,7 @@ import api from '@/api';
 
 const generateAccessToken = async (query: any): Promise <any>  => {
   return api({
-    url: "/access-token", 
+    url: "/app",
     method: "post",
     data: query,
     cache: true
@@ -26,7 +26,7 @@ const getConfiguration = async (query: any): Promise <any> => {
 }
 const getApiKey = async (query: any): Promise <any> => {
   return api({
-    url: "/api-key",
+    url: "/app",
     method: "get",
     params: query
   })

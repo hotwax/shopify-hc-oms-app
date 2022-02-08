@@ -64,7 +64,7 @@ export default defineComponent({
   },
   data() {
     return {
-      apiKey: process.env.VUE_APP_SHOPIFY_API_KEY,
+      apiKey: '',
       shopOrigin: 'hc-sandbox.myshopify.com',
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
@@ -82,6 +82,7 @@ export default defineComponent({
       })
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const app = createApp({
         apiKey,
         host: this.host,
@@ -99,8 +100,13 @@ export default defineComponent({
       if (resp.status) {
         this.$router.push("/configure");
       }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
+      }
     } else if (this.code) {
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const status = await generateAccessToken({
         "code": this.code,
         "shop": shop,
@@ -111,8 +117,12 @@ export default defineComponent({
       }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
       // TODO: Add error message to the UI when status is false or there is some error in the resp
       if (status) {
-        const appURL = `https://${shop}/admin/apps/${this.apiKey}`;
+        const appURL = `https://${shop}/admin/apps/${apiKey}`;
         window.location.assign(appURL);
+      }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
       }
     } else if (this.shop || this.host) {
       this.authorise(shop, this.host);
@@ -127,6 +137,7 @@ export default defineComponent({
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}`;
       if (window.top == window.self) {
         window.location.assign(permissionUrl);
@@ -136,6 +147,10 @@ export default defineComponent({
           host,
         });
         Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
+        }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
       }
       emitter.emit("dismissLoader");
     },
@@ -144,14 +159,16 @@ export default defineComponent({
       if (!apiKey) {
         // TODO update as per the API. API key will be setup in environment for the public app only
         // We will get the apiKey for custom apps, when unavailable
-        apiKey = await getApiKey({
+        const resp = await getApiKey({
           "shop": shop,
-          "appType": process.env.VUE_APP_SHOPIFY_APP_TYPE
+          "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
-
+        if (resp.status == 200 && resp.data.apiKey) {
+          this.apiKey = resp.data.apiKey
+          apiKey = resp.data.apiKey
+        }
       }
       return apiKey;
-
     }
   },
   beforeUnmount () {
