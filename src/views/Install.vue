@@ -82,6 +82,7 @@ export default defineComponent({
       })
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const app = createApp({
         apiKey,
         host: this.host,
@@ -99,8 +100,13 @@ export default defineComponent({
       if (resp.status) {
         this.$router.push("/configure");
       }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
+      }
     } else if (this.code) {
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const status = await generateAccessToken({
         "code": this.code,
         "shop": shop,
@@ -113,6 +119,10 @@ export default defineComponent({
       if (status) {
         const appURL = `https://${shop}/admin/apps/${apiKey}`;
         window.location.assign(appURL);
+      }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
       }
     } else if (this.shop || this.host) {
       this.authorise(shop, this.host);
@@ -127,6 +137,7 @@ export default defineComponent({
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
+      if (apiKey) {
       const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}`;
       if (window.top == window.self) {
         window.location.assign(permissionUrl);
@@ -136,6 +147,10 @@ export default defineComponent({
           host,
         });
         Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
+        }
+      } else {
+        console.error('Api key not found')
+        this.router.push('/')
       }
       emitter.emit("dismissLoader");
     },
@@ -144,11 +159,14 @@ export default defineComponent({
       if (!apiKey) {
         // TODO update as per the API. API key will be setup in environment for the public app only
         // We will get the apiKey for custom apps, when unavailable
-        apiKey = await getApiKey({
+        const resp = await getApiKey({
           "shop": shop,
           "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
-        this.apiKey = apiKey
+        if (resp.status == 200 && resp.data.apiKey) {
+          this.apiKey = resp.data.apiKey
+          apiKey = resp.data.apiKey
+        }
       }
       return apiKey;
     }
