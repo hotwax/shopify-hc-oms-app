@@ -64,7 +64,7 @@ export default defineComponent({
   },
   data() {
     return {
-      apiKey: process.env.VUE_APP_SHOPIFY_API_KEY,
+      apiKey: '',
       shopOrigin: 'hc-sandbox.myshopify.com',
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
@@ -111,7 +111,7 @@ export default defineComponent({
       }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
       // TODO: Add error message to the UI when status is false or there is some error in the resp
       if (status) {
-        const appURL = `https://${shop}/admin/apps/${this.apiKey}`;
+        const appURL = `https://${shop}/admin/apps/${apiKey}`;
         window.location.assign(appURL);
       }
     } else if (this.shop || this.host) {
@@ -146,12 +146,11 @@ export default defineComponent({
         // We will get the apiKey for custom apps, when unavailable
         apiKey = await getApiKey({
           "shop": shop,
-          "appType": process.env.VUE_APP_SHOPIFY_APP_TYPE
+          "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
-
+        this.apiKey = apiKey
       }
       return apiKey;
-
     }
   },
   beforeUnmount () {
