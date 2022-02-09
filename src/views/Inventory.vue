@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-fab >
+      <ion-fab>
         <ion-fab-button color="medium"  @click="() => router.push('/configure')">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
         </ion-fab-button>
@@ -17,24 +17,23 @@
             <h2>{{ $t("HotWax Commerce provides an inventory feed by dropping an XML file on an SFTP server. Set up your Shopify's store connection to the SFTP server to receive the inventory feed.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Host") }}</ion-label>
-              <ion-input v-model="host"></ion-input>
+              <ion-input v-model="host" />
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("Port") }}</ion-label>
-              <ion-input v-model="port"></ion-input>
+              <ion-input v-model="port" />
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("User Name") }}</ion-label>
-              <ion-input v-model="username"></ion-input>
+              <ion-input v-model="username" />
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Password") }}</ion-label>
-              <ion-input v-model="password"></ion-input>
+              <ion-input v-model="password" />
             </ion-item>
             <ion-item>
               <ion-label position="floating" >{{ $t("Private Key") }}</ion-label>
-              <ion-input clear-input placeholder="$t(Input text)" v-model="privateKey">
-              </ion-input>
+              <ion-input clear-input placeholder="$t(Input text)" v-model="privateKey" />
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -43,11 +42,11 @@
             <h2>{{ $t("Set up where to find the inventory feed on the SFTP server.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("Directory") }}</ion-label>
-              <ion-input v-model="directory"></ion-input>
+              <ion-input v-model="directory" />
             </ion-item> 
             <ion-item>
               <ion-label position="floating" >{{ $t("File Name") }}</ion-label>
-              <ion-input v-model="fileName"></ion-input>
+              <ion-input v-model="fileName" />
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -84,7 +83,6 @@ import {
   IonPage,
   IonSelect,
   IonSelectOption
-  
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline} from 'ionicons/icons'
@@ -157,13 +155,13 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-  .content {
-    max-width: 407px;
-    margin-top: 30px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-  .header{
-    text-align: center;
-  }
+.content {
+  max-width: 407px;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.header{
+  text-align: center;
+}
 </style>

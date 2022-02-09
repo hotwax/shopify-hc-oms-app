@@ -8,18 +8,18 @@
           <ion-list>
             <Logo />
             <ion-item>
-              <ion-label position="floating">Shop</ion-label>
+              <ion-label position="floating">{{ $t('Shop') }}</ion-label>
               <ion-input
                 v-model="shopOrigin"
                 name="shopOrigin"
                 type="text"
                 required
-              ></ion-input>
+              />
             </ion-item>
           </ion-list>
           <div class="ion-padding">
             <ion-button type="submit" expand="block" @click="install(shopOrigin)">
-              Install
+              {{ $t('Install') }}
             </ion-button>
           </div>
         </form>
@@ -75,31 +75,31 @@ export default defineComponent({
       code: this.$route.query['code']
     };
   },
-  async mounted () {
+  async mounted() {
     const shop: string = this.shop as string || this.shopOrigin
     this.store.dispatch('shop/setShop', {
-        "shop": shop
-      })
+      "shop": shop
+    })
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-      const app = createApp({
-        apiKey,
-        host: this.host,
-      });
-      const sessionToken = await getSessionToken(app);
-      this.store.dispatch('shop/setShopToken', {
+        const app = createApp({
+          apiKey,
+          host: this.host,
+        });
+        const sessionToken = await getSessionToken(app);
+        this.store.dispatch('shop/setShopToken', {
           "token": sessionToken
         })
 
-      const resp = await this.store.dispatch('shop/getConfiguration', {
-        "session": sessionToken,
-        "clientId": apiKey,
-        "shop": shop
-      })
-      if (resp.status) {
-        this.$router.push("/configure");
-      }
+        const resp = await this.store.dispatch('shop/getConfiguration', {
+          "session": sessionToken,
+          "clientId": apiKey,
+          "shop": shop
+        })
+        if (resp.status) {
+          this.$router.push("/configure");
+        }
       } else {
         console.error('Api key not found')
         this.router.push('/')
@@ -107,19 +107,19 @@ export default defineComponent({
     } else if (this.code) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-      const status = await generateAccessToken({
-        "code": this.code,
-        "shop": shop,
-        "clientId": apiKey,
-        "host": this.host,
-        "hmac": this.hmac,
-        "timestamp": this.timestamp
-      }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
-      // TODO: Add error message to the UI when status is false or there is some error in the resp
-      if (status) {
-        const appURL = `https://${shop}/admin/apps/${apiKey}`;
-        window.location.assign(appURL);
-      }
+        const status = await generateAccessToken({
+          "code": this.code,
+          "shop": shop,
+          "clientId": apiKey,
+          "host": this.host,
+          "hmac": this.hmac,
+          "timestamp": this.timestamp
+        }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
+        // TODO: Add error message to the UI when status is false or there is some error in the resp
+        if (status) {
+          const appURL = `https://${shop}/admin/apps/${apiKey}`;
+          window.location.assign(appURL);
+        }
       } else {
         console.error('Api key not found')
         this.router.push('/')
@@ -138,15 +138,15 @@ export default defineComponent({
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-      const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}`;
-      if (window.top == window.self) {
-        window.location.assign(permissionUrl);
-      } else {
-        const app = createApp({
-          apiKey,
-          host,
-        });
-        Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
+        const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}`;
+        if (window.top == window.self) {
+          window.location.assign(permissionUrl);
+        } else {
+          const app = createApp({
+            apiKey,
+            host,
+          });
+          Redirect.create(app).dispatch(Redirect.Action.REMOTE, permissionUrl);
         }
       } else {
         console.error('Api key not found')

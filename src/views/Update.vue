@@ -1,9 +1,9 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-fab >
+      <ion-fab>
         <ion-fab-button color="medium" @click="() => router.push('/configure')">
-          <ion-icon :icon="arrowBackOutline"></ion-icon>
+          <ion-icon :icon="arrowBackOutline" />
         </ion-fab-button>
       </ion-fab> 
       <h2 class="header">{{ $t("Updates from HotWax Commerce") }}</h2>
@@ -16,7 +16,7 @@
           <ion-card-content>
             <ion-item lines="none">
               <h2>{{ $t("Automatically refund cancelled orders via Shopify.") }}</h2>
-              <ion-toggle slot="end" name="Switch" @ionChange="refundStatusChanged()" :checked="refundOnOrderCancelled"></ion-toggle>
+              <ion-toggle slot="end" name="Switch" @ionChange="refundStatusChanged()" :checked="refundOnOrderCancelled" />
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -61,7 +61,7 @@ export default defineComponent({
     IonPage,
     IonToggle
   },
-  data () {
+  data() {
     return {
       status: false
     }
@@ -71,14 +71,14 @@ export default defineComponent({
       refundOnOrderCancelled: 'shop/getRefundStatus'
     })
   },
-  created () {
+  created() {
     this.status = this.refundOnOrderCancelled;
   },
   methods: {
-    refundStatusChanged () {
+    refundStatusChanged() {
       this.status = !this.status;
     },
-    saveRefundStatus () {
+    saveRefundStatus() {
       this.store.dispatch('shop/setConfiguration', this.status)
       showToast(translate('HotWax Commerce refund status updated'))
     }
@@ -97,14 +97,14 @@ export default defineComponent({
 });
 </script>
 <style scoped>
- .content {
-    max-width: 407px;
-    margin-top: 30px;
-    margin-right: auto;
-    margin-left: auto;
-  }
+.content {
+  max-width: 407px;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+}
 
-  .header{
-    text-align: center;
-  }
+.header{
+  text-align: center;
+}
 </style>

@@ -17,23 +17,23 @@ const state: any = {
 }
 
 const persistState = createPersistedState({
-    paths: [],
-    fetchBeforeUse: true
+  paths: [],
+  fetchBeforeUse: true
 })
 
 // Added modules here so that hydration takes place before routing
 const store = createStore<RootState>({
-    state,
-    actions,
-    mutations,
-    getters,
-    plugins: [ persistState ],
-    modules: {
-        'shop': shopModule
-    },
+  state,
+  actions,
+  mutations,
+  getters,
+  plugins: [ persistState ],
+  modules: {
+    'shop': shopModule
+  },
 })
 
 export default store
 export function useStore(): typeof store {
-    return useVuexStore()
+  return useVuexStore()
 }
