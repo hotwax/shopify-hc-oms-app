@@ -29,7 +29,7 @@ const store = createStore<RootState>({
   getters,
   plugins: [ persistState ],
   modules: {
-      'shop': shopModule
+    'shop': shopModule
   },
 })
 
