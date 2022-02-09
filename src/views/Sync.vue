@@ -1,9 +1,9 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-fab >
+      <ion-fab>
         <ion-fab-button color="medium" href="/configure">
-          <ion-icon :icon="arrowBackOutline"></ion-icon>
+          <ion-icon :icon="arrowBackOutline" />
         </ion-fab-button>
       </ion-fab> 
       <h2 class="header">{{ $t("Order Sync") }}</h2>
@@ -70,7 +70,7 @@ export default defineComponent({
     })
   },
   methods: {
-    updateOrderConfig () {
+    updateOrderConfig() {
       this.store.dispatch('shop/setConfiguration', this.orderConfig)
       showToast(translate('HotWax Commerce sync settings updated'))
     }
@@ -89,13 +89,13 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-  .content {
-    max-width: 407px;
-    margin-top: 30px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-  .header{
-    text-align: center;
-  }
+.content {
+  max-width: 407px;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.header{
+  text-align: center;
+}
 </style>

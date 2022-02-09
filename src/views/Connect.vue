@@ -1,9 +1,9 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true" class="ion-padding">
-      <ion-fab >
+      <ion-fab>
         <ion-fab-button color="medium" @click="() => router.push('/configure')">
-          <ion-icon :icon="arrowBackOutline"></ion-icon>
+          <ion-icon :icon="arrowBackOutline" />
         </ion-fab-button>
       </ion-fab>
       <h2 class="header">{{ $t("Connect HotWax Commerce") }}</h2>
@@ -47,8 +47,7 @@ import {
   IonInput,
   IonItem,
   IonLabel,
-  IonPage,
-  
+  IonPage
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowBackOutline, saveOutline, closeOutline } from 'ionicons/icons'
@@ -78,7 +77,7 @@ export default defineComponent({
     })
   },
   methods: {
-    updateConnectConfig () {
+    updateConnectConfig() {
       this.store.dispatch('shop/setConfiguration', this.connectConfig)
       showToast(translate('HotWax Commerce connection settings updated'))
     }
@@ -99,13 +98,13 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-  .content {
-    max-width: 407px;
-    margin-top: 30px;
-    margin-right: auto;
-    margin-left: auto;
-  }
-  .header{
-    text-align: center;
-  }
+.content {
+  max-width: 407px;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.header{
+  text-align: center;
+}
 </style>
