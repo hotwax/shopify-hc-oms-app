@@ -9,11 +9,17 @@ const actions: ActionTree<ShopState, RootState> = {
   setShopToken({ commit }, payload) {
     commit(types.SHOP_TOKEN_UPDATED, { token: payload.token })
   },
-  async setConfiguration ({ commit }, payload) {
+  async setConfiguration ({ commit, state }, payload) {
     let resp;
 
     try {
-      resp = await setConfiguration(payload)
+      resp = await setConfiguration({
+        'session': payload.token,
+        'clientId': payload.code,
+        'shop': state.shop,
+        'omsUrl': payload.url,
+        'omsToken': state.token
+      })
       // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
         commit(types.CONFIG_UPDATED, { config: payload })
