@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" class="ion-padding">
+    <ion-content class="ion-padding">
       <header>
         <h1>{{ $t("Welcome to Hotwax Commerce Order Management for Shopify") }}</h1>
       </header>
