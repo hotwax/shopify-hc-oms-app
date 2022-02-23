@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" class="ion-padding">
+    <ion-content class="ion-padding">
       <ion-fab>
         <ion-fab-button color="medium"  @click="() => router.push('/configure')">
           <ion-icon :icon="arrowBackOutline"></ion-icon>
