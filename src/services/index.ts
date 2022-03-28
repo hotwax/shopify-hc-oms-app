@@ -11,15 +11,15 @@ const generateAccessToken = async (query: any): Promise <any>  => {
 
 const setConfiguration = async (query: any): Promise <any> => {
   return api({
-    url: "/configuration",
-    method: "post",
+    url: "/app/oms",
+    method: "put",
     data: query
   })
 }
 
 const getConfiguration = async (query: any): Promise <any> => {
   return api({
-    url: "/configuration",
+    url: "/app/oms",
     method: "get",
     params: query
   })
