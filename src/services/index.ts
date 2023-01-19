@@ -11,7 +11,7 @@ const generateAccessToken = async (query: any): Promise <any>  => {
 
 const setConfiguration = async (query: any): Promise <any> => {
   return api({
-    url: "/app/oms",
+    url: "/app/instance",
     method: "put",
     data: query
   })
@@ -19,7 +19,7 @@ const setConfiguration = async (query: any): Promise <any> => {
 
 const getConfiguration = async (query: any): Promise <any> => {
   return api({
-    url: "/app/oms",
+    url: "/app/instance",
     method: "get",
     params: query
   })

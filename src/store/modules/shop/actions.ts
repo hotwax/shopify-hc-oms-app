@@ -4,6 +4,8 @@ import ShopState from './ShopState'
 import * as types from './mutation-types'
 import { getConfiguration, setConfiguration, } from '@/services'
 import { hasError } from '@/utils'
+import { getSessionToken } from "@shopify/app-bridge-utils";
+import createApp from "@shopify/app-bridge";
 
 const actions: ActionTree<ShopState, RootState> = {
   setShopToken({ commit }, payload) {
@@ -12,13 +14,22 @@ const actions: ActionTree<ShopState, RootState> = {
   async setConfiguration ({ commit, state }, payload) {
     let resp;
 
+    console.log("token", state.token);
+    // TODO Improve this code
+    const app = createApp({
+      apiKey: state.config.clientId,
+      host: state.config.host,
+    });
+    const sessionToken = await getSessionToken(app);
+    console.log("sessionToken", sessionToken);
+
     try {
       resp = await setConfiguration({
-        'session': payload.token,
-        'clientId': payload.code,
+        'session': sessionToken,
+        'clientId': state.config.clientId,
         'shop': state.shop,
-        'omsUrl': payload.url,
-        'omsToken': state.token
+        'instanceAddress': payload.url,
+        'instanceToken': payload.token
       })
       // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
@@ -39,7 +50,7 @@ const actions: ActionTree<ShopState, RootState> = {
     try {
       resp = await getConfiguration(payload)
       if (resp.status === 200 && !hasError(resp)) {
-        commit(types.CONFIG_UPDATED, { config: resp.data })
+        commit(types.CONFIG_UPDATED, { config: { ...resp.data, clientId: payload.clientId, host: payload.host } })
       } else {
         //showing error whenever getting no products in the response or having any other error
         // showToast(translate("Product not found"));

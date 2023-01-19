@@ -1,5 +1,5 @@
 export default interface ShopState {
   token: string;
-  config: object | null;
+  config: any;
   shop: string;
 }

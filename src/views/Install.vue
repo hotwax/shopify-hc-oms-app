@@ -37,6 +37,7 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  onIonViewDidEnter,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { Redirect } from "@shopify/app-bridge/actions";
@@ -65,14 +66,15 @@ export default defineComponent({
   data() {
     return {
       apiKey: '',
-      shopOrigin: 'hc-sandbox.myshopify.com',
+      shopOrigin: '',
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
-      shop: this.$route.query['shopOrigin'],
+      shop: this.$route.query['shop'],
       host: this.$route.query['host'] as string,
       locale: this.$route.query['locale'] || process.env.VUE_APP_I18N_LOCALE || process.env.VUE_APP_I18N_FALLBACK_LOCALE,
       timestamp: this.$route.query['timestamp'],
-      code: this.$route.query['code']
+      code: this.$route.query['code'],
+      state: this.$route.query['state']
     };
   },
   async mounted() {
@@ -95,7 +97,8 @@ export default defineComponent({
         const resp = await this.store.dispatch('shop/getConfiguration', {
           "session": sessionToken,
           "clientId": apiKey,
-          "shop": shop
+          "shop": shop,
+          "host": this.host
         })
         if (resp.status) {
           this.$router.push("/configure");
@@ -107,16 +110,26 @@ export default defineComponent({
     } else if (this.code) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        const status = await generateAccessToken({
+        console.log({
           "code": this.code,
           "shop": shop,
           "clientId": apiKey,
           "host": this.host,
           "hmac": this.hmac,
           "timestamp": this.timestamp
-        }).then(resp => resp.json()).then(data => data.status).catch(err => console.warn(err));
+        });
+        // TODO handle error case
+        const resp = await generateAccessToken({
+          "code": this.code,
+          "shop": shop,
+          "clientId": apiKey,
+          "host": this.host,
+          "hmac": this.hmac,
+          "timestamp": this.timestamp,
+          "state": this.state
+        });
         // TODO: Add error message to the UI when status is false or there is some error in the resp
-        if (status) {
+        if (resp) {
           const appURL = `https://${shop}/admin/apps/${apiKey}`;
           window.location.assign(appURL);
         }
@@ -134,6 +147,7 @@ export default defineComponent({
     },
     async authorise(shop: any, host: any) {
       emitter.emit("presentLoader");
+      console.log("shop", shop)
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
@@ -163,6 +177,7 @@ export default defineComponent({
           "shop": shop,
           "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
+        console.log("resp", resp);
         if (resp.status == 200 && resp.data.apiKey) {
           this.apiKey = resp.data.apiKey
           apiKey = resp.data.apiKey
