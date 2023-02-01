@@ -14,22 +14,20 @@ const actions: ActionTree<ShopState, RootState> = {
   async setConfiguration ({ commit, state }, payload) {
     let resp;
 
-    console.log("token", state.token);
     // TODO Improve this code
     const app = createApp({
       apiKey: state.config.clientId,
       host: state.config.host,
     });
     const sessionToken = await getSessionToken(app);
-    console.log("sessionToken", sessionToken);
 
     try {
       resp = await setConfiguration({
         'session': sessionToken,
         'clientId': state.config.clientId,
         'shop': state.shop,
-        'instanceAddress': payload.url,
-        'instanceToken': payload.token
+        'instanceAddress': payload.instanceAddress,
+        'instanceToken': payload.instanceToken
       })
       // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
@@ -38,7 +36,7 @@ const actions: ActionTree<ShopState, RootState> = {
         // TODO
       }
     } catch(error){
-      console.log(error)
+      console.error(error)
       // TODO showToast(translate("Something went wrong"));
     }
     // TODO Handle specific error
@@ -56,7 +54,7 @@ const actions: ActionTree<ShopState, RootState> = {
         // showToast(translate("Product not found"));
       }
     } catch(error){
-      console.log(error)
+      console.error(error)
       // showToast(translate("Something went wrong"));
     }
     // TODO Handle specific error

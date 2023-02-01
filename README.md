@@ -25,3 +25,10 @@ Shopify HotWax Commerce app
     `ionic build [--prod]`
     `firebase use production` (In case of production)
     `firebase deploy --only hosting:clienteling `
+
+### Netlify hosting deployment
+
+- Build Netlify configuration
+  `netlify build`
+- Deploy app
+  `netlify deploy --prod --dir=dist`

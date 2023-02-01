@@ -4,58 +4,23 @@
       <header>
         <h1>{{ $t("Welcome to Hotwax Commerce Order Management for Shopify") }}</h1>
       </header>
-
       <div class="content">
-        <ion-card id="instructions">
-          <ion-card-content>
-            <h1>{{ $t("Getting started checklist") }}</h1>
-            <h2>
-              {{ $t("Complete the following steps to connect this Shopify store to your HotWax Commerce installation.") }}
-            </h2>
-            <ol>
-              <li>
-                {{ $t("Connect this Shopify store to your Hotwax Commerce Instance.") }}
-              </li>
-              <li>
-                {{ $t("Set up and enable your order sync from Shopify to Hotwax Commerce.")}}
-              </li>
-              <li>
-                {{ $t("Set up and enable Shopify to pull in a Hotwax Commerce inventoryfeed.")}}
-              </li>
-              <li>
-                {{ $t("Set up and enable order updates to Shopify (order fulfillment, cancellation, and changes).") }}
-              </li>
-            </ol>
-          </ion-card-content>
-        </ion-card>
         <ion-card>
           <ion-card-content>
-            <h1>{{ $t("Connect Hotwax Commerce") }}</h1>
-            <h2>
-              {{ $t("Connect this Shopify store to your Hotwax Commerce Instance.") }}
-            </h2>
-            <ion-button @click="() => router.push('/Connect')" expand="block">{{ $t("Set up connection") }}</ion-button>
-          </ion-card-content>
-        </ion-card>
-        <ion-card>
-          <ion-card-content>
-            <h1>{{ $t("Set up inventory feed") }}</h1>
-            <h2>{{ $t("The inventory feed sync to Shopify is currently inactive.") }}</h2>
-            <ion-button disabled @click="() => router.push('/Inventory')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
-          </ion-card-content>
-        </ion-card>
-        <ion-card>
-          <ion-card-content>
-            <h1>{{ $t("Order Updates from Hotwax Commerce") }}</h1>
-            <h2>{{ $t("The order update sync to Shopify is currently inactive.") }}</h2>
-            <ion-button disabled @click="() => router.push('/Update')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
-          </ion-card-content>
-        </ion-card>
-        <ion-card>
-          <ion-card-content>
-            <h1>{{ $t("Order Sync to Hotwax Commerce") }}</h1>
-            <h2>{{ $t("The order sync to Shopify is currently inactive.") }}</h2>
-            <ion-button disabled  @click="() => router.push('/Sync')" expand="block" fill="outline">{{ $t("Settings") }}</ion-button>
+            <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
+            <ion-item>
+              <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
+              <ion-input v-model="connectConfig.instanceAddress">
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating" >{{ $t("Shared API Token") }}</ion-label>
+              <ion-input type="password" v-model="connectConfig.instanceToken"></ion-input>
+            </ion-item>
+            <ion-button expand="block" @click="updateConnectConfig">
+              <ion-icon slot="start" :icon="saveOutline" />
+              <ion-label> {{ $t("SAVE") }}</ion-label>
+            </ion-button>
           </ion-card-content>
         </ion-card>
       </div>
@@ -70,9 +35,17 @@ import {
   IonCardContent,
   IonContent,
   IonPage,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { useRouter } from 'vue-router';
+import { mapGetters, useStore } from "vuex";
+import { showToast } from '@/utils'
+import { translate } from '@/i18n'
+import { saveOutline } from 'ionicons/icons'
 
 
 export default defineComponent({
@@ -83,10 +56,26 @@ export default defineComponent({
     IonCardContent,
     IonContent,
     IonPage,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
+  },
+  computed: {
+    ...mapGetters({
+      connectConfig: 'shop/getConfig'
+    })
+  },
+  methods: {
+    updateConnectConfig() {
+      this.store.dispatch('shop/setConfiguration', this.connectConfig)
+      showToast(translate('HotWax Commerce connection settings updated'))
+    }
   },
   setup() {
     const router = useRouter();
-    return { router };
+    const store = useStore();
+    return { router, saveOutline, store };
   }
 });
 </script>

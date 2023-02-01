@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="install">
+      <div class="install" v-if="!loader">
         <!-- Commented form tag as when using it the install page reloads again and
         then redirect to shopify -->
         <form>
@@ -44,11 +44,11 @@ import { Redirect } from "@shopify/app-bridge/actions";
 import createApp from "@shopify/app-bridge";
 import { showToast } from "@/utils";
 import { useRouter } from "vue-router";
-import emitter from "@/event-bus"
 import { generateAccessToken, getApiKey } from "@/services"
 import { getSessionToken } from "@shopify/app-bridge-utils";
 import { useStore } from "vuex";
 import Logo from '@/components/Logo.vue';
+import { loadingController } from '@ionic/vue';
 
 
 export default defineComponent({
@@ -65,6 +65,7 @@ export default defineComponent({
   },
   data() {
     return {
+      loader: null as any,
       apiKey: '',
       shopOrigin: '',
       session: this.$route.query['session'],
@@ -78,6 +79,7 @@ export default defineComponent({
     };
   },
   async mounted() {
+    this.presentLoader();
     const shop: string = this.shop as string || this.shopOrigin
     this.store.dispatch('shop/setShop', {
       "shop": shop
@@ -100,6 +102,7 @@ export default defineComponent({
           "shop": shop,
           "host": this.host
         })
+        this.dismissLoader();
         if (resp.status) {
           this.$router.push("/configure");
         }
@@ -110,14 +113,6 @@ export default defineComponent({
     } else if (this.code) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        console.log({
-          "code": this.code,
-          "shop": shop,
-          "clientId": apiKey,
-          "host": this.host,
-          "hmac": this.hmac,
-          "timestamp": this.timestamp
-        });
         // TODO handle error case
         const resp = await generateAccessToken({
           "code": this.code,
@@ -146,8 +141,6 @@ export default defineComponent({
       this.authorise(shopOrigin, undefined);
     },
     async authorise(shop: any, host: any) {
-      emitter.emit("presentLoader");
-      console.log("shop", shop)
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
@@ -166,7 +159,7 @@ export default defineComponent({
         console.error('Api key not found')
         this.router.push('/')
       }
-      emitter.emit("dismissLoader");
+      this.dismissLoader();
     },
     async getApiKey(shop: string) {
       let apiKey = this.apiKey;
@@ -177,17 +170,29 @@ export default defineComponent({
           "shop": shop,
           "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
-        console.log("resp", resp);
         if (resp.status == 200 && resp.data.apiKey) {
           this.apiKey = resp.data.apiKey
           apiKey = resp.data.apiKey
         }
       }
       return apiKey;
+    },
+    async presentLoader() {
+      this.loader = await loadingController
+        .create({
+          message: this.$t("Processing request..."),
+          translucent: true
+        });
+      await this.loader.present();
+    },
+    dismissLoader() {
+      if (this.loader) {
+        this.loader.dismiss();
+      }
     }
   },
   beforeUnmount () {
-    emitter.emit("dismissLoader")
+    this.dismissLoader();
   },
   setup() {
     const store = useStore();
