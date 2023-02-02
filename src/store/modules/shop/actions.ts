@@ -3,9 +3,10 @@ import RootState from '@/store/RootState'
 import ShopState from './ShopState'
 import * as types from './mutation-types'
 import { getConfiguration, setConfiguration, } from '@/services'
-import { hasError } from '@/utils'
+import { hasError, showToast } from '@/utils'
 import { getSessionToken } from "@shopify/app-bridge-utils";
 import createApp from "@shopify/app-bridge";
+import { translate } from '@/i18n'
 
 const actions: ActionTree<ShopState, RootState> = {
   setShopToken({ commit }, payload) {
@@ -32,14 +33,14 @@ const actions: ActionTree<ShopState, RootState> = {
       // TODO Update specific payload
       if (resp.status === 200 && !hasError(resp)) {
         commit(types.CONFIG_UPDATED, { config: payload })
+        showToast(translate('HotWax Commerce connection settings updated'))
       } else {
-        // TODO
+        showToast(translate("Something went wrong"));
       }
     } catch(error){
       console.error(error)
-      // TODO showToast(translate("Something went wrong"));
+      showToast(translate("Something went wrong"));
     }
-    // TODO Handle specific error
     return resp;
   },
   async getConfiguration ({ commit }, payload) {
@@ -50,14 +51,12 @@ const actions: ActionTree<ShopState, RootState> = {
       if (resp.status === 200 && !hasError(resp)) {
         commit(types.CONFIG_UPDATED, { config: { ...resp.data, clientId: payload.clientId, host: payload.host } })
       } else {
-        //showing error whenever getting no products in the response or having any other error
-        // showToast(translate("Product not found"));
+        showToast(translate("Something went wrong while getting current configuration"));
       }
     } catch(error){
       console.error(error)
-      // showToast(translate("Something went wrong"));
+      showToast(translate("Something went wrong while getting current configuration"));
     }
-    // TODO Handle specific error
     return resp;
   },
   setShop({ commit }, payload) {

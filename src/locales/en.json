@@ -36,6 +36,8 @@
   "Set up where to find the inventory feed on the SFTP server.":"Set up where to find the inventory feed on the SFTP server.",
   "Set up connection":"Set up connection",
   "Set up inventory feed":"Set up inventory feed",
+  "Something went wrong": "Something went wrong",
+  "Something went wrong while getting current configuration": "Something went wrong while getting current configuration",
   "Template shipment map":"Template shipment map",
   "The inventory feed sync to Shopify is currently inactive.": "The inventory feed sync to Shopify is currently inactive.",
   "The order sync to Shopify is currently inactive.": "The order sync to Shopify is currently inactive.",
