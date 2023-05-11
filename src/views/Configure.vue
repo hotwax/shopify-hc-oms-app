@@ -23,6 +23,28 @@
             </ion-button>
           </ion-card-content>
         </ion-card>
+        <ion-card v-if="connectConfig.instanceAddress && connectConfig.instanceToken">
+          <ion-card-content>
+            <h2>{{ $t("Your connection request has been received and will be processed in the next 24 hours.") }}</h2>
+          </ion-card-content>
+        </ion-card>
+        <ion-card v-if="connectConfig.instanceAddress && connectConfig.instanceToken">
+          <ion-card-content>
+            <h2>{{ $t("Manage your sync with Shopify") }}</h2>
+            <p>{{ $t("Complete the following steps to see products and orders of this Shopify store in HotWax Commerce app.") }}</p>
+            <ol>
+              <li>Go to the <a href="https://job-manager.hotwax.io">Job manager</a></li>
+              <li>Open initial load</li>
+              <li>Import products in bulk</li>
+              <li>Import orders in bulk</li>
+            </ol>
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-card-content>
+            <h2>If you have any questions or need further assistance, please contact us at <a href="mailto:support@hotwax.co">support@hotwax.co</a></h2>
+          </ion-card-content>
+        </ion-card>
       </div>
     </ion-content>
   </ion-page>
@@ -84,16 +106,11 @@ export default defineComponent({
   }
 
   .content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
     max-width: 732px;
     margin-top: 20px;
     margin-right: auto;
     margin-left: auto;
   }
 
-  #instructions {
-    grid-column: span 2;
-  }
 }
 </style>
