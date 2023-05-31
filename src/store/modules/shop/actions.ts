@@ -36,10 +36,12 @@ const actions: ActionTree<ShopState, RootState> = {
         showToast(translate('HotWax Commerce connection settings updated'))
       } else {
         showToast(translate("Something went wrong"));
+        return Promise.reject(resp);
       }
     } catch(error){
       console.error(error)
       showToast(translate("Something went wrong"));
+      return Promise.reject(resp);
     }
     return resp;
   },
