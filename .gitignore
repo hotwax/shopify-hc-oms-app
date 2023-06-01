@@ -34,3 +34,7 @@ npm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+.env
+.env.*
+!.env.example
