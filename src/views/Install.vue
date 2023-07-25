@@ -37,7 +37,7 @@ import {
   IonLabel,
   IonList,
   IonPage,
-  onIonViewDidEnter,
+  onIonViewDidEnter
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { Redirect } from "@shopify/app-bridge/actions";
@@ -49,6 +49,7 @@ import { getSessionToken } from "@shopify/app-bridge-utils";
 import { useStore } from "vuex";
 import Logo from '@/components/Logo.vue';
 import { loadingController } from '@ionic/vue';
+
 
 
 export default defineComponent({
@@ -75,7 +76,8 @@ export default defineComponent({
       locale: this.$route.query['locale'] || process.env.VUE_APP_I18N_LOCALE || process.env.VUE_APP_I18N_FALLBACK_LOCALE,
       timestamp: this.$route.query['timestamp'],
       code: this.$route.query['code'],
-      state: this.$route.query['state']
+      state: this.$route.query['state'],
+      embedded: this.$route.query['embedded']
     };
   },
   async mounted() {
@@ -133,7 +135,29 @@ export default defineComponent({
         this.router.push('/')
       }
     } else if (this.shop || this.host) {
-      this.authorise(shop, this.host);
+      const query = JSON.parse(JSON.stringify(this.$route.query))
+      if (this.embedded === "1") {
+        // escape iframe
+        // TODO Check if shop is missing when only getting the host
+        delete query.embedded
+        const updatedQuery = new URLSearchParams(query).toString()
+        const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
+        const url = new URL(decodeURIComponent(shop.startsWith("https") ? shop : `https://${shop}/`));
+        if (url.hostname === location.hostname) {
+          const apiKey = await this.getApiKey(shop);
+          const app = await createApp({
+            apiKey,
+            host: this.host,
+          });
+          // Redirecting to same page, escaping iframe and removing embedded parameter
+          Redirect.create(app).dispatch(Redirect.Action.REMOTE, redirectUri + "?" + updatedQuery);
+        } else {
+          // TODO Remove this. Fallback
+          window.location.assign(redirectUri + "?" + updatedQuery);
+        }
+      } else {
+        this.authorise(shop, this.host);
+      }
     }
   },
   methods: {
