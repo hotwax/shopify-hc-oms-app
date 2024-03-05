@@ -172,9 +172,6 @@ export default defineComponent({
       this.authorise(shopOrigin, undefined);
     },
     async authorise(shop: any, host: any) {
-
-      // Verifying whether the app and shop have a valid hmac or not
-      console.log('this.timestamp', typeof this.timestamp)
       try {
         const resp = await verifyRequest({ clientId: this.apiKey, shop, hmac: this.hmac, timestamp: this.timestamp, host: this.host })
         console.log('resp in verify request', JSON.stringify(resp.data))
@@ -192,8 +189,6 @@ export default defineComponent({
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
         const nonce = this.generateNonce();
-        console.log('nonce', nonce)
-        // Check if need to pass nonce and online access token
         const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}&state=${nonce}`;
         if (window.top == window.self) {
           window.location.assign(permissionUrl);
