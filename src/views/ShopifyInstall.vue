@@ -24,28 +24,6 @@
           </div>
         </form>
       </div>
-
-      <div v-if="session && !loader">
-        <form>
-          <ion-list>
-            <Logo />
-            <ion-item>
-              <ion-label position="floating">{{ $t('OMS') }}</ion-label>
-              <ion-input
-                v-model="oms"
-                name="oms"
-                type="text"
-                required
-              />
-            </ion-item>
-          </ion-list>
-          <div class="ion-padding">
-            <ion-button expand="block" @click.stop="redirect()">
-              {{ $t('Redirect') }}
-            </ion-button>
-          </div>
-        </form>
-      </div>
     </ion-content>
   </ion-page>
 </template>
@@ -93,22 +71,41 @@ export default defineComponent({
       timestamp: this.$route.query['timestamp'],
       code: this.$route.query['code'],
       state: this.$route.query['state'],
-      embedded: this.$route.query['embedded'],
-      oms: ''
+      embedded: this.$route.query['embedded']
     };
   },
   async mounted() {
+    this.presentLoader();
     const shop: string = this.shop as string || this.shopOrigin
 
     if (this.session) {
-      console.log('this.$route.query', this.$route, JSON.stringify(this.$route.query))
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        const resp = await getInstance(this.$route.fullPath.split("?")[1])
-        this.dismissLoader();
-        if (resp.status) {
-          // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
-          this.$router.push("/configure");
+
+        const queryParams = this.$route.fullPath.split("?")[1]
+        const payload = queryParams.split('&').reduce((params: any, param) => {
+          const [key, value] = param.split('=')
+          params[key] = value
+          return params;
+        }, {})
+
+        this.loader.message = 'Fetching Connection details'
+
+        try {
+          const resp = await getInstance({
+            ...payload,
+            clientId: apiKey
+          })
+          this.dismissLoader();
+          if (!hasError(resp) && resp.data.instance) {
+            // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
+            window.location.replace(resp.data.instanceAddress)
+          } else {
+            throw resp.data
+          }
+        } catch(err) {
+          console.error('Failed to fetch the instance details')
+          this.$router.push(`/configure?${queryParams}&clientId=${apiKey}`);
         }
       } else {
         console.error('Api key not found')
@@ -126,18 +123,22 @@ export default defineComponent({
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
         // TODO handle error case
+
+        const queryParams = this.$route.fullPath.split("?")[1]
+        const payload = queryParams.split('&').reduce((params: any, param) => {
+          const [key, value] = param.split('=')
+          params[key] = value
+          return params;
+        }, {})
+
         const resp = await generateAccessToken({
-          "code": this.code,
-          "shop": shop,
-          "clientId": apiKey,
-          "host": this.host,
-          "hmac": this.hmac,
-          "timestamp": this.timestamp,
-          "state": this.state
+          ...payload,
+          clientId: apiKey
         });
         console.log('access token generated')
         // TODO: Add error message to the UI when status is false or there is some error in the resp
         if (resp) {
+          // Making this redirection to get the browser session value
           const appURL = `https://${shop}/admin/apps/${apiKey}`;
           window.location.assign(appURL);
         }
@@ -145,8 +146,8 @@ export default defineComponent({
         console.error('Api key not found')
         this.router.push('/')
       }
+      this.dismissLoader()
     } else if (this.shop || this.host) {
-      console.log('this.$route.query', JSON.stringify(this.$route.query))
       const query = JSON.parse(JSON.stringify(this.$route.query))
       if (this.embedded === "1") {
         // escape iframe
@@ -172,14 +173,26 @@ export default defineComponent({
       this.authorise(shopOrigin, undefined);
     },
     async authorise(shop: any, host: any) {
+      await this.presentLoader();
       try {
-        const resp = await verifyRequest({ clientId: this.apiKey, shop, hmac: this.hmac, timestamp: this.timestamp, host: this.host })
-        console.log('resp in verify request', JSON.stringify(resp.data))
+        const queryParams = this.$route.fullPath.split("?")[1]
+        const payload = queryParams ? queryParams.split('&').reduce((params: any, param) => {
+          const [key, value] = param.split('=')
+          params[key] = value
+          return params;
+        }, {}) : {}
+
+        const resp = await verifyRequest({
+          ...payload,
+          clientId: this.apiKey
+        })
 
         if(hasError(resp) || resp.data.requestAuthorizationCode != 'true') {
           throw resp.data
         }
       } catch(err: any) {
+        this.dismissLoader();
+        showToast("Failed to verify the request, please try again")
         console.error('error', err)
         return;
       }
@@ -227,6 +240,7 @@ export default defineComponent({
     dismissLoader() {
       if (this.loader) {
         this.loader.dismiss();
+        this.loader = null
       }
     },
     generateNonce() {
@@ -238,13 +252,6 @@ export default defineComponent({
       localStorage.setItem('nonce', nonce);
 
       return nonce;
-    },
-    redirect() {
-      if(this.oms) {
-        window.location.assign(`https://${this.oms}.hotwax.io/commerce`);
-      } else {
-        showToast('Please enter instance name before procedding')
-      }
     }
   },
   beforeUnmount () {

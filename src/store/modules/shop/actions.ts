@@ -23,7 +23,7 @@ const actions: ActionTree<ShopState, RootState> = {
     const sessionToken = await getSessionToken(app);
 
     try {
-      resp = await setConfiguration({
+      resp = await setConfiguration({}, {
         'session': sessionToken,
         'clientId': state.config.clientId,
         'shop': state.shop,

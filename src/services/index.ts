@@ -4,16 +4,17 @@ const generateAccessToken = async (query: any): Promise <any>  => {
   return api({
     url: "/app",
     method: "post",
-    data: query,
+    params: query,  // As discussed, we will always pass the query in request params irrespective of method used
     cache: true
   });
 }
 
-const setConfiguration = async (query: any): Promise <any> => {
+const setConfiguration = async (query: any, data: any): Promise <any> => {
   return api({
     url: "/app/instance",
-    method: "put",
-    data: query
+    method: "POST",
+    params: query,   // As discussed, we will always pass the query in request params irrespective of method used
+    data
   })
 }
 
