@@ -75,20 +75,13 @@ export default defineComponent({
     };
   },
   async mounted() {
-    this.presentLoader();
+    await this.presentLoader();
     const shop: string = this.shop as string || this.shopOrigin
 
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-
-        const queryParams = this.$route.fullPath.split("?")[1]
-        const payload = queryParams.split('&').reduce((params: any, param) => {
-          const [key, value] = param.split('=')
-          params[key] = value
-          return params;
-        }, {})
-
+        const payload = this.getQueryParams();
         this.loader.message = 'Fetching Connection details'
 
         try {
@@ -96,8 +89,7 @@ export default defineComponent({
             ...payload,
             clientId: apiKey
           })
-          this.dismissLoader();
-          if (!hasError(resp) && resp.data.instance) {
+          if (!hasError(resp) && resp.data.instanceAddress) {
             // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
             window.location.replace(resp.data.instanceAddress)
           } else {
@@ -105,13 +97,14 @@ export default defineComponent({
           }
         } catch(err) {
           console.error('Failed to fetch the instance details')
-          this.$router.push(`/configure?${queryParams}&clientId=${apiKey}`);
+          this.$router.push(`/configure?${this.$route.fullPath.split("?")[1]}&clientId=${apiKey}`);
         }
       } else {
         console.error('Api key not found')
         this.router.push('/')
       }
     } else if (this.code) {
+      this.loader.message = "Verifying request..."
       const nonce = localStorage.getItem('nonce')
 
       if(nonce !== this.state) {
@@ -122,27 +115,28 @@ export default defineComponent({
 
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        // TODO handle error case
+        this.loader.message = "Fetching token..."
+        const payload = this.getQueryParams()
 
-        const queryParams = this.$route.fullPath.split("?")[1]
-        const payload = queryParams.split('&').reduce((params: any, param) => {
-          const [key, value] = param.split('=')
-          params[key] = value
-          return params;
-        }, {})
-
-        const resp = await generateAccessToken({
-          ...payload,
-          clientId: apiKey
-        });
-        console.log('access token generated')
-        // TODO: Add error message to the UI when status is false or there is some error in the resp
-        if (resp) {
-          // Making this redirection to get the browser session value
-          const appURL = `https://${shop}/admin/apps/${apiKey}`;
-          window.location.assign(appURL);
+        try {
+          const resp = await generateAccessToken({
+            ...payload,
+            clientId: apiKey
+          });
+          // TODO: Add error message to the UI when status is false or there is some error in the resp
+          if (!hasError(resp)) {
+            // Making this redirection to get the browser session value
+            const appURL = `https://${shop}/admin/apps/${apiKey}`;
+            window.location.assign(appURL);
+          } else {
+            throw resp.data
+          }
+        } catch(err) {
+          showToast('Failed to fetch the token')
+          console.error('err', err)
         }
       } else {
+        showToast('Failed to find the api key')
         console.error('Api key not found')
         this.router.push('/')
       }
@@ -164,9 +158,12 @@ export default defineComponent({
           window.location.assign(redirectUri + "?" + updatedQuery);
         }
       } else {
-        this.authorise(shop, this.host);
+        // Using await as if not used then the loader gets dismissed
+        await this.authorise(shop, this.host);
       }
+      this.dismissLoader()
     }
+    this.dismissLoader()
   },
   methods: {
     install(shopOrigin: any) {
@@ -175,13 +172,9 @@ export default defineComponent({
     async authorise(shop: any, host: any) {
       await this.presentLoader();
       try {
-        const queryParams = this.$route.fullPath.split("?")[1]
-        const payload = queryParams ? queryParams.split('&').reduce((params: any, param) => {
-          const [key, value] = param.split('=')
-          params[key] = value
-          return params;
-        }, {}) : {}
+        const payload = this.getQueryParams()
 
+        this.loader.message = "Verifying request..."
         const resp = await verifyRequest({
           ...payload,
           clientId: this.apiKey
@@ -196,6 +189,8 @@ export default defineComponent({
         console.error('error', err)
         return;
       }
+
+      this.loader.message = "Redirecting..."
 
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
@@ -222,7 +217,6 @@ export default defineComponent({
           "appTypeId": process.env.VUE_APP_SHOPIFY_APP_TYPE
         });
         if (resp.status == 200 && resp.data.apiKey) {
-          console.log('api key', resp)
           this.apiKey = resp.data.apiKey
           apiKey = resp.data.apiKey
         }
@@ -230,6 +224,9 @@ export default defineComponent({
       return apiKey;
     },
     async presentLoader() {
+      if(this.loader) {
+        return;
+      }
       this.loader = await loadingController
         .create({
           message: this.$t("Processing request..."),
@@ -252,9 +249,17 @@ export default defineComponent({
       localStorage.setItem('nonce', nonce);
 
       return nonce;
+    },
+    getQueryParams() {
+      const queryParams = this.$route.fullPath.split("?")[1]
+      return queryParams ? queryParams.split('&').reduce((params: any, param) => {
+        const [key, value] = param.split('=')
+        params[key] = value
+        return params;
+      }, {}) : {}
     }
   },
-  beforeUnmount () {
+  ionViewWillLeave() {
     this.dismissLoader();
   },
   setup() {

@@ -125,6 +125,7 @@ export default defineComponent({
         if (resp.status === 200 && !hasError(resp)) {
           showToast(translate('HotWax Commerce connection settings updated'))
           this.isConfigUpdated = true
+          window.location.replace(this.instanceAddress)
         } else {
           throw resp.data
         }
