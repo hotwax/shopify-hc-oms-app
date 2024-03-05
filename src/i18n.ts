@@ -22,7 +22,9 @@ function loadLocaleMessages(): LocaleMessages<VueMessageType> {
 const i18n = createI18n({
   locale: process.env.VUE_APP_I18N_LOCALE || 'en',
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
-  messages: loadLocaleMessages()
+  messages: {
+    en: loadLocaleMessages()
+  }
 })
 
 // TODO Check if this is needed in updated versions
