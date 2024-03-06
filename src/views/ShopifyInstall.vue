@@ -1,28 +1,17 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="install" v-if="!loader || !session">
-        <!-- Commented form tag as when using it the install page reloads again and
-        then redirect to shopify -->
-        <form @keyup.enter="install(shopOrigin)">
-          <ion-list>
-            <Logo />
-            <ion-item>
-              <ion-label position="floating">{{ $t('Shop') }}</ion-label>
-              <ion-input
-                v-model="shopOrigin"
-                name="shopOrigin"
-                type="text"
-                required
-              />
-            </ion-item>
-          </ion-list>
-          <div class="ion-padding">
-            <ion-button expand="block" @click.stop="install(shopOrigin)" @keyup.prevent>
-              {{ $t('Install') }}
+      <div class="install" v-if="!loader || !session || !code || !shop">
+        <ion-list>
+          <Logo />
+          <ion-item lines="none">
+            <ion-label class="ion-text-wrap">{{ $t('Checkout our app on the app store!') }}</ion-label>
+            <ion-button fill="clear" @click="goToShopifyAppStore()">
+              {{ $t('View app') }}
+              <ion-icon :icon="openOutline" />
             </ion-button>
-          </div>
-        </form>
+          </ion-item>
+        </ion-list>
       </div>
     </ion-content>
   </ion-page>
@@ -32,7 +21,7 @@
 import {
   IonButton,
   IonContent,
-  IonInput,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -41,17 +30,18 @@ import {
 import { defineComponent } from "vue";
 import { hasError, showToast } from "@/utils";
 import { useRouter } from "vue-router";
-import { generateAccessToken, getApiKey, getInstance, verifyRequest } from "@/services"
+import { generateAccessToken, getApiKey, verifyRequest } from "@/services"
 import { useStore } from "vuex";
 import Logo from '@/components/Logo.vue';
 import { loadingController } from '@ionic/vue';
+import { openOutline } from 'ionicons/icons'
 
 export default defineComponent({
   name: "ShopifyInstall",
   components: {
     IonButton,
     IonContent,
-    IonInput,
+    IonIcon,
     IonItem,
     IonLabel,
     IonList,
@@ -62,7 +52,6 @@ export default defineComponent({
     return {
       loader: null as any,
       apiKey: 'ec8cec8c4299d0ea17269da567eebc28',
-      shopOrigin: '',
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
       shop: this.$route.query['shop'],
@@ -77,7 +66,7 @@ export default defineComponent({
   },
   async mounted() {
     await this.presentLoader();
-    const shop: string = this.shop as string || this.shopOrigin
+    const shop: string = this.shop as string
 
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
@@ -200,9 +189,6 @@ export default defineComponent({
         return Promise.reject(err);
       }
     },
-    install(shopOrigin: any) {
-      this.authorise(shopOrigin, undefined);
-    },
     async authorise(shop: any, host: any, verify = true) {
       await this.presentLoader();
 
@@ -290,6 +276,9 @@ export default defineComponent({
         params[key] = value
         return params;
       }, {}) : {}
+    },
+    goToShopifyAppStore() {
+      window.location.assign('https://apps.shopify.com/')
     }
   },
   ionViewWillLeave() {
@@ -299,6 +288,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     return {
+      openOutline,
       router,
       store,
       showToast,
@@ -315,7 +305,7 @@ export default defineComponent({
   height: 100%;
 }
 
-form {
+ion-list {
   max-width: 375px;
 }
 </style>

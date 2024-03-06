@@ -23,33 +23,6 @@
             </ion-button>
           </ion-card-content>
         </ion-card>
-        <ion-card v-if="isConfigUpdated && instanceAddress && instanceToken">
-          <ion-card-content>
-            <h2>{{ $t("Your instance is ready to use.") }}</h2>
-          </ion-card-content>
-        </ion-card>
-        <ion-card v-if="instanceAddress && instanceToken">
-          <ion-card-content>
-            <h2>{{ $t("Manage your sync with Shopify") }}</h2>
-            <p>{{ $t("Complete the following steps to see products and orders of this Shopify store in HotWax Commerce app.") }}</p>
-            <ol>
-              <li>Go to the <a :href="instanceAddress.startsWith('https') ? instanceAddress : 'https://' + instanceAddress + '/commerce/control/FindShopifyShop' " target="_blank">Shopify Shop page</a> of the Order Management System (OMS).</li>
-              <li>Select your Shop and edit access scope, setting it to "Shopify shop read and write access".</li>
-              <li>Go to the <a href="https://job-manager.hotwax.io" target="_blank">Job manager</a></li>
-              <li>Open the "Initial load" page</li>
-              <li>Select the "Import Products in Bulk" function, and run the import.</li>
-              <li>Open the "Miscellaneous Jobs" page</li>
-              <li>Select the "Process bulk imported files" function and run it.</li>
-              <li>Return to the "Initial Load" page.</li>
-              <li>Select the "Import Orders in Bulk" function</li>
-              <li>Input the last Shopify order ID to import orders from and run the import.</li>
-              <li>Open the "Miscellaneous Jobs" page</li>
-              <li>Select the "Process bulk imported files" function and run it.</li>
-              <li>Go to the Order Management System (OMS) to view your <a :href="instanceAddress.startsWith('https') ? instanceAddress : 'https://' + instanceAddress + '/commerce/control/FindProduct'" target="_blank">products</a> and <a :href="instanceAddress.startsWith('https') ? instanceAddress : 'https://' + instanceAddress + '/commerce/control/FindOrder'" target="_blank">orders</a>.</li>
-            </ol>
-            <p>To know more: Watch this <a href="https://www.youtube.com/watch?v=UpbwX8rYnVk" target="_blank">demo video</a> of how to use HotWax and Shopify integration through the Job Manager.</p>
-          </ion-card-content>
-        </ion-card>
         <ion-card>
           <ion-card-content>
             <h2>If you have any questions or need further assistance, please contact us at <a href="mailto:support@hotwax.co">support@hotwax.co</a></h2>
@@ -113,6 +86,10 @@ export default defineComponent({
       params[key] = value
       return params;
     }, {}) : {}
+
+    if(!Object.keys(this.payload).length) {
+      this.router.push('/')
+    }
   },
   methods: {
     async updateConnectConfig() {
