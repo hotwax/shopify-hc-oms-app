@@ -71,7 +71,8 @@ export default defineComponent({
       timestamp: this.$route.query['timestamp'],
       code: this.$route.query['code'],
       state: this.$route.query['state'],
-      embedded: this.$route.query['embedded']
+      embedded: this.$route.query['embedded'],
+      scopes: ''
     };
   },
   async mounted() {
@@ -82,6 +83,32 @@ export default defineComponent({
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
         const payload = this.getQueryParams();
+
+        try {
+          const resp = await this.verifyRequest();
+
+          console.log('resp', resp)
+
+          // When having requestAuthorizationCode as true, it means that the permissions/access-scopes are changed and thus need to re-auth the app
+          if(resp.requestAuthorizationCode == 'true') {
+            this.scopes = resp.scopes
+
+            if(this.scopes) {
+              await this.authorise(shop, undefined, false);
+            } else {
+              this.dismissLoader();
+              showToast("Failed to get the access scopes")
+              console.error('Failed to get the access scopes')
+              return;
+            }
+          }
+        } catch(err: any) {
+          this.dismissLoader();
+          showToast("Failed to verify the request, please try again")
+          console.error('error', err)
+          return;
+        }
+
         this.loader.message = 'Fetching Connection details'
 
         try {
@@ -104,6 +131,7 @@ export default defineComponent({
           this.$router.push(`/configure?${query}`);
         }
       } else {
+        console.log('======================0')
         console.error('Api key not found')
         this.router.push('/')
       }
@@ -170,11 +198,7 @@ export default defineComponent({
     this.dismissLoader()
   },
   methods: {
-    install(shopOrigin: any) {
-      this.authorise(shopOrigin, undefined);
-    },
-    async authorise(shop: any, host: any) {
-      await this.presentLoader();
+    async verifyRequest() {
       try {
         const payload = this.getQueryParams()
 
@@ -184,29 +208,53 @@ export default defineComponent({
           clientId: this.apiKey
         })
 
-        if(hasError(resp) || resp.data.requestAuthorizationCode != 'true') {
+        if(hasError(resp)) {
           throw resp.data
+        } else {
+          return Promise.resolve({ requestAuthorizationCode: resp.data?.requestAuthorizationCode, scopes: resp.data?.accessScopes })
         }
       } catch(err: any) {
-        this.dismissLoader();
-        showToast("Failed to verify the request, please try again")
-        console.error('error', err)
-        return;
+        return Promise.reject(err);
+      }
+    },
+    install(shopOrigin: any) {
+      this.authorise(shopOrigin, undefined);
+    },
+    async authorise(shop: any, host: any, verify = true) {
+      await this.presentLoader();
+
+      if(verify) {
+        try {
+          // Only checking whether the request is valid or not, not checking for the requestAuthorizationCode
+          const resp = await this.verifyRequest();
+          this.scopes = resp.scopes;
+        } catch(err: any) {
+          this.dismissLoader();
+          showToast("Failed to verify the request, please try again")
+          console.error('error', err)
+          return;
+        }
       }
 
       this.loader.message = "Redirecting..."
 
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
-      const scopes = process.env.VUE_APP_SHOPIFY_SCOPES;
       const apiKey = await this.getApiKey(shop);
-      if (apiKey) {
+      console.log('apiKey', apiKey)
+      console.log('this.scopes', this.scopes)
+      if (apiKey && this.scopes) {
         const nonce = this.generateNonce();
-        const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}&state=${nonce}`;
+        const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${this.scopes}&redirect_uri=${redirectUri}&state=${nonce}`;
         if (window.top == window.self) {
           window.location.assign(permissionUrl);
         }
       } else {
-        console.error('Api key not found')
+        let message = 'Api key not found'
+        if(!this.scopes) {
+          message = 'Access scopes not found'
+        }
+        console.error(message)
+        showToast(message)
         this.router.push('/')
       }
       this.dismissLoader();
