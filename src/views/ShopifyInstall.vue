@@ -82,12 +82,8 @@ export default defineComponent({
     if (this.session) {
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        const payload = this.getQueryParams();
-
         try {
           const resp = await this.verifyRequest();
-
-          console.log('resp', resp)
 
           // When having requestAuthorizationCode as true, it means that the permissions/access-scopes are changed and thus need to re-auth the app
           if(resp.requestAuthorizationCode == 'true') {
@@ -101,6 +97,16 @@ export default defineComponent({
               console.error('Failed to get the access scopes')
               return;
             }
+          } else if(resp.instanceAddress) {
+            // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
+            window.location.replace(resp.instanceAddress)
+          } else {
+            console.error('Failed to fetch the instance details')
+            let query = this.$route.fullPath.split("?")[1]
+            if(!query.includes('clientId')) {
+              query += `&clientId=${apiKey}`
+            }
+            this.$router.push(`/configure?${query}`);
           }
         } catch(err: any) {
           this.dismissLoader();
@@ -108,30 +114,7 @@ export default defineComponent({
           console.error('error', err)
           return;
         }
-
-        this.loader.message = 'Fetching Connection details'
-
-        try {
-          const resp = await getInstance({
-            ...payload,
-            clientId: apiKey
-          })
-          if (!hasError(resp) && resp.data.instanceAddress) {
-            // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
-            window.location.replace(resp.data.instanceAddress)
-          } else {
-            throw resp.data
-          }
-        } catch(err) {
-          console.error('Failed to fetch the instance details')
-          let query = this.$route.fullPath.split("?")[1]
-          if(!query.includes('clientId')) {
-            query += `&clientId=${apiKey}`
-          }
-          this.$router.push(`/configure?${query}`);
-        }
       } else {
-        console.log('======================0')
         console.error('Api key not found')
         this.router.push('/')
       }
@@ -211,7 +194,7 @@ export default defineComponent({
         if(hasError(resp)) {
           throw resp.data
         } else {
-          return Promise.resolve({ requestAuthorizationCode: resp.data?.requestAuthorizationCode, scopes: resp.data?.accessScopes })
+          return Promise.resolve({ requestAuthorizationCode: resp.data?.requestAuthorizationCode, scopes: resp.data?.accessScopes, instanceAddress: resp.data?.instanceAddress })
         }
       } catch(err: any) {
         return Promise.reject(err);
@@ -240,8 +223,6 @@ export default defineComponent({
 
       const redirectUri = process.env.VUE_APP_SHOPIFY_REDIRECT_URI;
       const apiKey = await this.getApiKey(shop);
-      console.log('apiKey', apiKey)
-      console.log('this.scopes', this.scopes)
       if (apiKey && this.scopes) {
         const nonce = this.generateNonce();
         const permissionUrl = `https://${shop}/admin/oauth/authorize?client_id=${apiKey}&scope=${this.scopes}&redirect_uri=${redirectUri}&state=${nonce}`;
