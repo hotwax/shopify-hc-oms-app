@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      <div class="install" v-if="!loader">
+      <div class="install" v-if="!loader || !session">
         <!-- Commented form tag as when using it the install page reloads again and
         then redirect to shopify -->
         <form @keyup.enter="install(shopOrigin)">
@@ -97,7 +97,11 @@ export default defineComponent({
           }
         } catch(err) {
           console.error('Failed to fetch the instance details')
-          this.$router.push(`/configure?${this.$route.fullPath.split("?")[1]}&clientId=${apiKey}`);
+          let query = this.$route.fullPath.split("?")[1]
+          if(!query.includes('clientId')) {
+            query += `&clientId=${apiKey}`
+          }
+          this.$router.push(`/configure?${query}`);
         }
       } else {
         console.error('Api key not found')
