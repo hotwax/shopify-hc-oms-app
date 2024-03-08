@@ -1,5 +1,5 @@
 {
-  "name": "shopify-hc-oms-app",
+  "name": "shopify-oms-connector",
   "version": "1.0.0",
   "private": true,
   "scripts": {
