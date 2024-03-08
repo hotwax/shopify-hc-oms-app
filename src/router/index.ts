@@ -1,22 +1,22 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import Configure from '../views/Configure.vue'
-import Install from '@/views/Install.vue'
+import ShopifyInstall from '@/views/ShopifyInstall.vue';
+import Configure from '@/views/Configure.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/install'
+    redirect: '/shopify-install'
+  },
+  {
+    path: '/shopify-install',
+    name: 'Shopify Install',
+    component: ShopifyInstall
   },
   {
     path: '/configure',
     name: 'Configure',
     component: Configure
-  },
-  {
-    path: '/install',
-    name: 'Install',
-    component: Install
   }
 ]
 
