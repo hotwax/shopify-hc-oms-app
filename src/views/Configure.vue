@@ -10,7 +10,7 @@
             <h2>{{ $t("Enter connection information to make sure your Shopify store can talk to your HotWax Commerce instance.") }}</h2>
             <ion-item>
               <ion-label position="floating" >{{ $t("HotWax Commerce URL") }}</ion-label>
-              <ion-input v-model="instanceAddress" placeholder="https://oms.hotwax.io" @change="isConfigUpdated = false">
+              <ion-input v-model="instanceAddress" placeholder="https://<oms>.hotwax.io" @change="isConfigUpdated = false">
               </ion-input>
             </ion-item>
             <ion-item>
