@@ -35,6 +35,7 @@ import { useStore } from "vuex";
 import Logo from '@/components/Logo.vue';
 import { loadingController } from '@ionic/vue';
 import { openOutline } from 'ionicons/icons'
+import { translate } from "@/i18n";
 
 export default defineComponent({
   name: "ShopifyInstall",
@@ -82,7 +83,7 @@ export default defineComponent({
               await this.authorise(shop, undefined, false);
             } else {
               this.dismissLoader();
-              showToast("Failed to get the access scopes")
+              showToast(translate("Failed to get the access scopes"))
               console.error('Failed to get the access scopes')
               return;
             }
@@ -99,7 +100,7 @@ export default defineComponent({
           }
         } catch(err: any) {
           this.dismissLoader();
-          showToast("Failed to verify the request, please try again")
+          showToast(translate("Failed to verify the request, please try again"))
           console.error('error', err)
           return;
         }
@@ -136,11 +137,11 @@ export default defineComponent({
             throw resp.data
           }
         } catch(err) {
-          showToast('Failed to fetch the token')
+          showToast(translate('Failed to fetch the token'))
           console.error('err', err)
         }
       } else {
-        showToast('Failed to find the api key')
+        showToast(translate('Failed to find the api key'))
         console.error('Api key not found')
         this.router.push('/')
       }
@@ -199,7 +200,7 @@ export default defineComponent({
           this.scopes = resp.scopes;
         } catch(err: any) {
           this.dismissLoader();
-          showToast("Failed to verify the request, please try again")
+          showToast(translate("Failed to verify the request, please try again"))
           console.error('error', err)
           return;
         }
@@ -221,7 +222,7 @@ export default defineComponent({
           message = 'Access scopes not found'
         }
         console.error(message)
-        showToast(message)
+        showToast(translate(message))
         this.router.push('/')
       }
       this.dismissLoader();
