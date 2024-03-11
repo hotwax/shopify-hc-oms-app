@@ -1,5 +1,5 @@
 {
-  "name": "shopify-oms-connector",
+  "name": "app-bridge",
   "version": "2.1.0",
   "private": true,
   "scripts": {
