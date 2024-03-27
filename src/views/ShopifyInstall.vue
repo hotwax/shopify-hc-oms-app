@@ -279,7 +279,7 @@ export default defineComponent({
       }, {}) : {}
     },
     goToShopifyAppStore() {
-      window.location.assign('https://apps.shopify.com/')
+      window.location.assign('https://apps.shopify.com/hotwax-order-management')
     }
   },
   ionViewWillLeave() {
