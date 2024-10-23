@@ -25,10 +25,6 @@
             <ion-label class="ion-text-wrap" v-if="isAppInstalled">{{ $t('Shopify store synced with HotWax Commerce') }}</ion-label>
           </ion-item>
           <ion-progress-bar type="indeterminate" v-if="syncDetailsToShopify"></ion-progress-bar>
-          <ion-item class="ion-item-button ion-margin-vertical" lines="none" button @click="goToLearnMoreDocument()">
-            <ion-icon slot="start" :icon="bookOutline" />
-            <ion-label class="ion-text-wrap">{{ $t('Learn more about connecting HotWax Commerce with Shopify') }}</ion-label>
-          </ion-item>
 
           <template v-if="isAppInstalled">
             <ion-item lines="none">
@@ -56,6 +52,11 @@
               </span>
             </ion-item>
           </template>
+
+          <ion-item class="ion-item-button ion-margin-top" lines="none" button @click="goToLearnMoreDocument()">
+            <ion-icon slot="start" :icon="bookOutline" />
+            <ion-label class="ion-text-wrap">{{ $t('Learn more about connecting HotWax Commerce with Shopify') }}</ion-label>
+          </ion-item>
         </ion-list>
       </div>
     </ion-content>
