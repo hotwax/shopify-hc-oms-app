@@ -31,15 +31,16 @@
           </ion-item>
 
           <template v-if="isAppInstalled">
-            <ion-item>
-              <ion-label>{{ $t("OMS") }}</ion-label>
-              <ion-input v-model="instanceAddress" :placeholder="$t('notnaked-oms')" @change="isConfigUpdated = false"></ion-input>
+            <ion-item lines="none">
+              <ion-input :label="$t('OMS')" v-model="instanceAddress" :placeholder="$t('notnaked-oms')" helper-text="https://notnaked-oms.hotwax.io" @change="isConfigUpdated = false"></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label>{{ $t("JWT Token") }}</ion-label>
-              <ion-input :placeholder="$t('notnaked-oms')" type="password" v-model="instanceToken" @change="isConfigUpdated = false"></ion-input>
-            </ion-item>
-            <ion-button :disabled="!instanceAddress || !instanceToken" expand="block" @click="updateConnectConfig" color="dark">
+            <div class="item-input-wrapper">
+              <ion-item>
+                <ion-input :label="$t('JWT Token')" :placeholder="$t('notnaked-oms')" type="password" v-model="instanceToken" @change="isConfigUpdated = false"></ion-input>
+              </ion-item>
+              <ion-note class="ion-margin-start" color="primary" @click="generateTokenDocLink()">{{ $t("Generate a JWT Token") }}</ion-note>
+            </div>
+            <ion-button class="ion-margin-vertical" :disabled="!instanceAddress || !instanceToken" expand="block" @click="updateConnectConfig" color="dark">
               <ion-label>{{ $t("Finish Setup") }}</ion-label>
               <ion-icon slot="end" :icon="arrowForwardOutline" />
             </ion-button>
@@ -47,7 +48,12 @@
               <ion-label>{{ $t("Find your OMS name") }}</ion-label>
             </ion-item>
             <ion-item detail lines="none">
-              <ion-label class="ion-text-wrap">{{ $t("Don't have a HotWax Commerce account? Contact Us") }}</ion-label>
+              <span>
+                <ion-label class="ion-text-wrap">
+                  {{ $t("Don't have a HotWax Commerce account?") }}
+                </ion-label>
+                <ion-label color="primary" @click="navigateToContactUs">{{ $t("Contact Us") }}</ion-label>
+              </span>
             </ion-item>
           </template>
         </ion-list>
@@ -65,6 +71,7 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNote,
   IonPage,
   IonProgressBar,
   modalController
@@ -90,6 +97,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonList,
+    IonNote,
     IonPage,
     IonProgressBar,
     Logo
@@ -374,6 +382,18 @@ export default defineComponent({
       });
 
       omsModal.present();
+    },
+    async generateTokenDocLink() {
+      await this.presentLoader();
+      this.loader.message = "Redirecting..."
+      window.location.assign('https://docs.hotwax.co/documents/v/integrate-with-hotwax/hotwax-commerce-api-and-data-feeds/initial-api-authentication')
+      this.dismissLoader();
+    },
+    async navigateToContactUs() {
+      await this.presentLoader();
+      this.loader.message = "Redirecting..."
+      window.location.assign('https://www.hotwax.co/connect')
+      this.dismissLoader();
     }
   },
   ionViewWillLeave() {
@@ -412,5 +432,10 @@ ion-list {
 .ion-item-button::part(native) {
   background-color: #F5F6F9;
   border-radius: 20px;
+}
+
+.item-input-wrapper > ion-note {
+  font-size: 12px;
+  cursor: pointer;
 }
 </style>

@@ -1,7 +1,8 @@
 {
   "Access scopes not found": "Access scopes not found",
   "Api key not found": "Api key not found",
-  "Don't have a HotWax Commerce account? Contact Us": "Don't have a HotWax Commerce account? Contact Us",
+  "Contact Us": "Contact Us",
+  "Don't have a HotWax Commerce account?": "Don't have a HotWax Commerce account?",
   "Failed to fetch the token": "Failed to fetch the token",
   "Failed to find the api key": "Failed to find the api key",
   "Failed to get the access scopes": "Failed to get the access scopes",
