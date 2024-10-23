@@ -4,14 +4,14 @@
       <div class="install" v-if="!loader || !session || !code || !shop">
         <ion-list>
           <Logo />
-          <ion-item lines="none" class="ion-margin-vertical" v-if="authenticationInProgress">
+          <ion-item lines="none" v-if="authenticationInProgress">
             <ion-icon slot="start" :icon="cloudDownloadOutline" />
             <ion-label class="ion-text-wrap">
               {{ $t('Installing HotWax Commerce onto your Shopify store...') }}
               <p>{{ $t("You'll be auto redirected to your Shopify store to complete the installation process") }}</p>
             </ion-label>
           </ion-item>
-          <ion-item lines="none" class="ion-margin-vertical" v-else-if="syncDetailsToShopify || isAppInstalled">
+          <ion-item lines="none" v-else-if="syncDetailsToShopify || isAppInstalled">
             <ion-icon slot="start" color="success" :icon="checkmarkCircleOutline" />
             <ion-label class="ion-text-wrap">
               {{ $t('HotWax Commerce is installed on your Shopify store') }}
@@ -19,7 +19,7 @@
             </ion-label>
           </ion-item>
           <ion-progress-bar type="indeterminate" v-if="authenticationInProgress"></ion-progress-bar>
-          <ion-item lines="none" class="ion-margin-vertical" :disabled="authenticationInProgress" v-if="syncDetailsToShopify || isAppInstalled">
+          <ion-item lines="none" :disabled="authenticationInProgress" v-if="syncDetailsToShopify || isAppInstalled">
             <ion-icon slot="start" :icon="cloudUploadOutline" />
             <ion-label class="ion-text-wrap" v-if="syncDetailsToShopify">{{ $t('Syncing Shopify store to HotWax Commerce') }}</ion-label>
             <ion-label class="ion-text-wrap" v-if="isAppInstalled">{{ $t('Shopify store synced with HotWax Commerce') }}</ion-label>
