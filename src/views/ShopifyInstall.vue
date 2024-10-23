@@ -191,7 +191,6 @@ export default defineComponent({
 
       const apiKey = await this.getApiKey(shop);
       if (apiKey) {
-        // this.loader.message = "Fetching token..."
         const payload = this.getQueryParams()
 
         try {
@@ -245,8 +244,6 @@ export default defineComponent({
     async verifyRequest() {
       try {
         const payload = this.getQueryParams()
-
-        // this.loader.message = "Verifying request..."
         const resp = await verifyRequest({
           ...payload,
           clientId: this.apiKey
