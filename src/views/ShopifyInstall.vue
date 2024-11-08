@@ -48,7 +48,7 @@
                 <ion-label class="ion-text-wrap">
                   {{ $t("Don't have a HotWax Commerce account?") }}
                 </ion-label>
-                <ion-label color="primary" @click="navigateToContactUs">{{ $t("Contact Us") }}</ion-label>
+                <a href="https://www.hotwax.co/connect">{{ $t("Contact Us") }}</a>
               </span>
             </ion-item>
           </template>
@@ -106,7 +106,7 @@ export default defineComponent({
   data() {
     return {
       loader: null as any,
-      apiKey: '61a49df39017a4481e2aaf633900cea9',
+      apiKey: '',
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
       shop: this.$route.query['shop'],
@@ -358,6 +358,12 @@ export default defineComponent({
       this.dismissLoader();
     },
     async updateConnectConfig() {
+      if (!this.instanceAddress.startsWith("https://") || !this.instanceAddress.endsWith(".hotwax.io")) {
+        showToast(translate("Enter valid url in the format https://notnaked-oms.hotwax.io"));
+        return;
+      }
+
+      await this.presentLoader();
       try {
         const resp = await setConfiguration(this.payload, {
           'instanceAddress': this.instanceAddress,
@@ -376,6 +382,7 @@ export default defineComponent({
         showToast(translate("Something went wrong"));
         this.isConfigUpdated = false
       }
+      this.dismissLoader();
     },
     async openOmsModal() {
       const omsModal = await modalController.create({
@@ -388,12 +395,6 @@ export default defineComponent({
       await this.presentLoader();
       this.loader.message = "Redirecting..."
       window.location.assign('https://docs.hotwax.co/documents/v/integrate-with-hotwax/hotwax-commerce-api-and-data-feeds/initial-api-authentication')
-      this.dismissLoader();
-    },
-    async navigateToContactUs() {
-      await this.presentLoader();
-      this.loader.message = "Redirecting..."
-      window.location.assign('https://www.hotwax.co/connect')
       this.dismissLoader();
     }
   },
@@ -438,5 +439,9 @@ ion-list {
 .item-input-wrapper > ion-note {
   font-size: 12px;
   cursor: pointer;
+}
+
+a {
+  text-decoration: none;
 }
 </style>
