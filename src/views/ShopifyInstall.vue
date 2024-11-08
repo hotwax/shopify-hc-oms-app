@@ -48,7 +48,7 @@
                 <ion-label class="ion-text-wrap">
                   {{ $t("Don't have a HotWax Commerce account?") }}
                 </ion-label>
-                <a href="https://www.hotwax.co/connect">{{ $t("Contact Us") }}</a>
+                <a href="https://hubs.la/Q02XvGwv0">{{ $t("Contact Us") }}</a>
               </span>
             </ion-item>
           </template>
