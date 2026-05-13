@@ -431,6 +431,17 @@ ion-list {
   max-width: 375px;
 }
 
+@media (prefers-color-scheme: dark) {
+  .ion-item-button {
+    --color: var(--ion-color-dark-contrast);
+  }
+
+  .ion-item-button ion-icon,
+  .ion-item-button ion-label {
+    color: var(--ion-color-dark-contrast);
+  }
+}
+
 .ion-item-button::part(native) {
   background-color: #F5F6F9;
   border-radius: 20px;
