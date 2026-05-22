@@ -430,7 +430,7 @@ export default defineComponent({
 ion-list {
   max-width: 375px;
 }
-
+  
 .ion-item-button::part(native) {
   background-color: #F5F6F9;
   border-radius: 20px;
@@ -443,5 +443,13 @@ ion-list {
 
 a {
   text-decoration: none;
+}
+  
+@media (prefers-color-scheme: dark) {
+  
+  .ion-item-button ion-icon,
+  .ion-item-button ion-label {
+    color: var(--ion-color-dark-contrast);
+  }
 }
 </style>
