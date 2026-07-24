@@ -18,13 +18,6 @@ const setConfiguration = async (query: any, data: any): Promise <any> => {
   })
 }
 
-const getConfiguration = async (query: any): Promise <any> => {
-  return api({
-    url: "/app/instance",
-    method: "get",
-    params: query
-  })
-}
 const getApiKey = async (query: any): Promise <any> => {
   return api({
     url: "/app",
@@ -41,19 +34,9 @@ const verifyRequest = async (query: any): Promise <any> => {
   })
 }
 
-const getInstance = async (query: any): Promise <any> => {
-  return api({
-    url: "/app/instance",
-    method: "GET",
-    params: query
-  })
-}
-
 export {
   generateAccessToken,
   getApiKey,
   setConfiguration,
-  getConfiguration,
-  getInstance,
   verifyRequest
 }

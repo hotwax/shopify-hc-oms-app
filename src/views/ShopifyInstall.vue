@@ -20,9 +20,10 @@
           </ion-item>
           <ion-progress-bar type="indeterminate" v-if="authenticationInProgress"></ion-progress-bar>
           <ion-item lines="none" :disabled="authenticationInProgress" v-if="syncDetailsToShopify || isAppInstalled">
-            <ion-icon slot="start" :icon="cloudUploadOutline" />
+            <ion-icon slot="start" :color="isPending ? 'warning' : 'medium'" :icon="cloudUploadOutline" />
             <ion-label class="ion-text-wrap" v-if="syncDetailsToShopify">{{ $t('Syncing Shopify store to HotWax Commerce') }}</ion-label>
-            <ion-label class="ion-text-wrap" v-if="isAppInstalled">{{ $t('Shopify store synced with HotWax Commerce') }}</ion-label>
+            <ion-label class="ion-text-wrap" v-else-if="isPending">{{ $t('Shopify store sync with HotWax Commerce is pending approval') }}</ion-label>
+            <ion-label class="ion-text-wrap" v-else-if="isAppInstalled">{{ $t('Shopify store synced with HotWax Commerce') }}</ion-label>
           </ion-item>
           <ion-progress-bar type="indeterminate" v-if="syncDetailsToShopify"></ion-progress-bar>
 
@@ -32,9 +33,9 @@
             </ion-item>
             <div class="item-input-wrapper">
               <ion-item>
-                <ion-input :label="$t('JWT Token')" :placeholder="$t('notnaked-oms')" type="password" v-model="instanceToken" @change="isConfigUpdated = false"></ion-input>
+                <ion-input :label="$t('Access Token')" :placeholder="$t('notnaked-oms')" type="password" v-model="instanceToken" @change="isConfigUpdated = false"></ion-input>
               </ion-item>
-              <ion-note class="ion-margin-start" color="primary" @click="generateTokenDocLink()">{{ $t("Generate a JWT Token") }}</ion-note>
+              <ion-note class="ion-margin-start" color="primary" @click="generateTokenDocLink()">{{ $t("Generate an Access Token") }}</ion-note>
             </div>
             <ion-button class="ion-margin-vertical" :disabled="!instanceAddress || !instanceToken" expand="block" @click="updateConnectConfig" color="dark">
               <ion-label>{{ $t("Finish Setup") }}</ion-label>
@@ -123,7 +124,8 @@ export default defineComponent({
       instanceAddress: '',
       instanceToken: '',
       isConfigUpdated: false,
-      payload: {}
+      payload: {},
+      isPending: false
     };
   },
   computed: {
@@ -152,9 +154,24 @@ export default defineComponent({
               console.error('Failed to get the access scopes')
               return;
             }
+          } else if(!resp.requestStatusId || resp.requestStatusId !== "SairAccepted") {
+            this.syncDetailsToShopify = false;
+            this.isAppInstalled = true;
+            this.isPending = true;
+
+            let query = this.$route.fullPath.split("?")[1]
+            if(!query.includes('clientId')) {
+              query += `&clientId=${apiKey}`
+            }
+
+            this.payload = query ? query.split('&').reduce((params: any, param) => {
+              const [key, value] = param.split('=')
+              params[key] = value
+              return params;
+            }, {}) : {}
           } else if(resp.instanceAddress) {
-            // Redirect the user to the oms instance that is configured, otherwise ask for the oms instance name
-            window.location.replace(resp.instanceAddress)
+            // Redirect the user to launchpad, otherwise ask for the oms instance name
+            window.location.replace("https://launchpad.hotwax.io")
           } else {
             console.error('Failed to fetch the instance details')
             this.isAppInstalled = true;
@@ -261,7 +278,7 @@ export default defineComponent({
         if(hasError(resp)) {
           throw resp.data
         } else {
-          return Promise.resolve({ requestAuthorizationCode: resp.data?.requestAuthorizationCode, scopes: resp.data?.accessScopes, instanceAddress: resp.data?.instanceAddress })
+          return Promise.resolve({ requestAuthorizationCode: resp.data?.requestAuthorizationCode, scopes: resp.data?.accessScopes, instanceAddress: resp.data?.instanceAddress, requestStatusId: resp.data?.requestStatusId })
         }
       } catch(err: any) {
         return Promise.reject(err);
@@ -358,11 +375,6 @@ export default defineComponent({
       this.dismissLoader();
     },
     async updateConnectConfig() {
-      if (!this.instanceAddress.startsWith("https://") || !this.instanceAddress.endsWith(".hotwax.io")) {
-        showToast(translate("Enter valid url in the format https://notnaked-oms.hotwax.io"));
-        return;
-      }
-
       await this.presentLoader();
       try {
         const resp = await setConfiguration(this.payload, {
@@ -371,9 +383,16 @@ export default defineComponent({
         })
         // TODO Update specific payload
         if (resp.status === 200 && !hasError(resp)) {
-          showToast(translate('HotWax Commerce connection settings updated'))
+          showToast(translate('HotWax Commerce connection request submitted'))
           this.isConfigUpdated = true
-          window.location.replace(this.instanceAddress)
+
+          if(!resp.data?.requestStatusId || resp.data?.requestStatusId !== "SairAccepted") {
+            this.isPending = true
+            this.instanceAddress = ""
+            this.instanceToken = ""
+          } else {
+            window.location.replace("https://launchpad.hotwax.io")
+          }
         } else {
           throw resp.data
         }
