@@ -22,6 +22,7 @@
           <ion-item lines="none" :disabled="authenticationInProgress" v-if="syncDetailsToShopify || isAppInstalled">
             <ion-icon slot="start" :color="isPending ? 'warning' : 'medium'" :icon="cloudUploadOutline" />
             <ion-label class="ion-text-wrap" v-if="syncDetailsToShopify">{{ $t('Syncing Shopify store to HotWax Commerce') }}</ion-label>
+            <ion-label class="ion-text-wrap" v-else-if="isInit">{{ $t('Sync Shopify store with HotWax Commerce') }}</ion-label>
             <ion-label class="ion-text-wrap" v-else-if="isPending">{{ $t('Shopify store sync with HotWax Commerce is pending approval') }}</ion-label>
             <ion-label class="ion-text-wrap" v-else-if="isAppInstalled">{{ $t('Shopify store synced with HotWax Commerce') }}</ion-label>
           </ion-item>
@@ -107,7 +108,7 @@ export default defineComponent({
   data() {
     return {
       loader: null as any,
-      apiKey: '',
+      apiKey: process.env.VUE_APP_SHOPIFY_API_KEY,
       session: this.$route.query['session'],
       hmac: this.$route.query['hmac'],
       shop: this.$route.query['shop'],
@@ -125,7 +126,8 @@ export default defineComponent({
       instanceToken: '',
       isConfigUpdated: false,
       payload: {},
-      isPending: false
+      isPending: false,
+      isInit: false
     };
   },
   computed: {
@@ -157,7 +159,12 @@ export default defineComponent({
           } else if(!resp.requestStatusId || resp.requestStatusId !== "SairAccepted") {
             this.syncDetailsToShopify = false;
             this.isAppInstalled = true;
-            this.isPending = true;
+
+            if(!resp.requestStatusId) {
+              this.isInit = true;
+            } else {
+              this.isPending = true;
+            }
 
             let query = this.$route.fullPath.split("?")[1]
             if(!query.includes('clientId')) {
@@ -387,7 +394,12 @@ export default defineComponent({
           this.isConfigUpdated = true
 
           if(!resp.data?.requestStatusId || resp.data?.requestStatusId !== "SairAccepted") {
-            this.isPending = true
+            if(!resp.data.requestStatusId) {
+              this.isInit = true
+            } else {
+              this.isInit = false
+              this.isPending = true
+            }
             this.instanceAddress = ""
             this.instanceToken = ""
           } else {
